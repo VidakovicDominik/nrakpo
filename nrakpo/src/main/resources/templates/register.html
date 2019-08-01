@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments :: head" ></head>
+<body>
+<div class="container-fluid">
+    <div th:replace="fragments :: header" ></div>
+    <h1 text="Registration"></h1>
+    <div th:if="${param.error}" class="validation-error" text="Unable to register."></div>
+    <form method="POST" th:action="@{/register}">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="username" text="Username" ></label>
+                <input type="text" name="username" class="form-control" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="password" text="Password" ></label>
+                <input type="password" name="password" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="email" text="E-mail" ></label>
+                <input type="text" name="email" class="form-control" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="free">Free</label>
+                <input type="radio" id="free" name="userPackage" value="FREE" class="form-control" checked/>
+
+                <label for="pro">Pro</label>
+                <input type="radio" id="pro" name="userPackage" value="PRO" class="form-control" />
+
+                <label for="gold">Gold</label>
+                <input type="radio" id="gold" name="userPackage" value="GOLD" class="form-control" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label for="local">Local</label>
+                <input type="radio" id="local" name="accountType" value="LOCAL" class="form-control" />
+
+                <label for="google">Google</label>
+                <input type="radio" id="google" name="accountType" value="GOOGLE" class="form-control" />
+
+                <label for="github">GitHub</label>
+                <input type="radio" id="github" name="accountType" value="GITHUB" class="form-control" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <input type="submit" th:value="Submit" class="form-control btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

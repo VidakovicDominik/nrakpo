@@ -2,6 +2,7 @@ package com.vidakovic.nrakpo.data.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.util.List;
 
@@ -21,12 +22,13 @@ public class Photo {
 
     private Long date;
 
-    private List<String> hashtags;
+    @ManyToMany
+    private List<Hashtag> hashtags;
 
     @ManyToOne
     private User user;
 
-    public Photo(String description, String url, String size, String format, Long date, List<String> hashtags, User user) {
+    public Photo(String description, String url, String size, String format, Long date, List<Hashtag> hashtags, User user) {
         this.description = description;
         this.url = url;
         this.size = size;
@@ -76,11 +78,11 @@ public class Photo {
         this.format = format;
     }
 
-    public List<String> getHashtags() {
+    public List<Hashtag> getHashtags() {
         return hashtags;
     }
 
-    public void setHashtags(List<String> hashtags) {
+    public void setHashtags(List<Hashtag> hashtags) {
         this.hashtags = hashtags;
     }
 
