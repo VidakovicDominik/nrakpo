@@ -20,7 +20,7 @@ public class RegistrationForm {
 
     private String email;
 
-    private UserType userType;
+    private UserType userType=UserType.USER;
 
     private UserPackage userPackage;
 
