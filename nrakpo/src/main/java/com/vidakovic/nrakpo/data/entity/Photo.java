@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.data.entity;
 
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 
 import javax.persistence.*;
 import java.util.Date;

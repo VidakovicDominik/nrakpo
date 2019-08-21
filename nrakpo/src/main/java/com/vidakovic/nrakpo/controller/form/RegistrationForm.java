@@ -5,10 +5,9 @@
  */
 package com.vidakovic.nrakpo.controller.form;
 
-import com.vidakovic.nrakpo.data.entity.AccountType;
+import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.User;
-import com.vidakovic.nrakpo.data.entity.UserPackage;
-import com.vidakovic.nrakpo.data.entity.UserType;
+import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 

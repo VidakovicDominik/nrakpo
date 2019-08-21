@@ -1,5 +1,9 @@
 package com.vidakovic.nrakpo.data.entity;
 
+import com.vidakovic.nrakpo.data.entity.enums.AccountType;
+import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
+import com.vidakovic.nrakpo.data.entity.enums.UserType;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;

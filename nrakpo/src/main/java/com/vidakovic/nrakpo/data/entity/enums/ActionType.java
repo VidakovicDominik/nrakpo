@@ -1,8 +1,8 @@
-package com.vidakovic.nrakpo.data.entity;
+package com.vidakovic.nrakpo.data.entity.enums;
 
 /**
  * <p>
- * <b>Title: ImageFormat  </b>
+ * <b>Title: ActionType  </b>
  * </p>
  * <p>
  * <b> Description:
@@ -24,8 +24,8 @@ package com.vidakovic.nrakpo.data.entity;
  * </p>
  * <br>
  * PA1 21-Aug-19
- * @since 21-Aug-19 10:55:42
+ * @since 21-Aug-19 14:32:42
  */
-public enum ImageFormat {
-    JPEG,BMP,PNG
+public enum ActionType {
+    PICTURE_ADDED,PICTURE_DELETED,PICTURE_EDITED,PICTURE_DOWNLOADED,PICTURES_QUERIED,USER_EDITED
 }
