@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+<div class="container-fluid">
+    <div th:replace="fragments :: header"></div>
+    <h1>Picture Upload</h1>
+    <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
+    <form method="POST" th:object="${photo}">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label>Description: </label>
+                <input type="text" th:field="*{description}" class="form-control"/>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label>Image URL: </label>
+                <input type="text" th:field="*{url}" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label>Size: </label>
+                <input type="text" th:field="*{size}" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Format: </label>
+            <select th:field="*{format}" class="form-control" >
+                <option value="" >---Choose---</option>
+                <option th:each="format : ${formats}"
+                        th:value="${format}"
+                        th:text="${format}"></option>
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <label>Hashtags: </label>
+                <input type="text" th:field="*{hashtags}" class="form-control" ></input>
+            </div>
+        </div>
+        <div class="form-row" >
+            <div class="col-md-4 mb-3">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <input type="submit" value="Submit proposal" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

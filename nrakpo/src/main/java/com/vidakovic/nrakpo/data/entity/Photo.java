@@ -1,15 +1,17 @@
 package com.vidakovic.nrakpo.data.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import java.util.List;
+import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Photo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String description;
@@ -18,24 +20,45 @@ public class Photo {
 
     private String size;
 
-    private String format;
+    private ImageFormat format;
 
     private Long date;
 
-    @ManyToMany
-    private List<Hashtag> hashtags;
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private Set<Hashtag> hashtags;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public Photo(String description, String url, String size, String format, Long date, List<Hashtag> hashtags, User user) {
+    public Photo(String description, String url, String size, ImageFormat format, Set<Hashtag> hashtags, User user) {
         this.description = description;
         this.url = url;
         this.size = size;
         this.format = format;
-        this.date = date;
+        this.date = new Date().getTime();
         this.hashtags = hashtags;
         this.user = user;
+    }
+
+    public Photo(PhotoApiModel photoModel, User user){
+        this.description=photoModel.getDescription();
+        this.format=ImageFormat.valueOf(photoModel.getFormat());
+        this.size=photoModel.getSize();
+        this.url=photoModel.getUrl();
+        this.user=user;
+        this.date= new Date().getTime();
+        this.hashtags= parseHashtags(photoModel.getHashtags());
+    }
+
+    private Set<Hashtag> parseHashtags(String rawHashtags){
+        Set<Hashtag> hashtags=new HashSet<>();
+        for (String ht:rawHashtags.split("#")) {
+            hashtags.add(new Hashtag(ht.trim()));
+        }
+        return hashtags;
+    }
+
+    public Photo() {
     }
 
     public Long getDate() {
@@ -70,19 +93,19 @@ public class Photo {
         this.size = size;
     }
 
-    public String getFormat() {
+    public ImageFormat getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
+    public void setFormat(ImageFormat format) {
         this.format = format;
     }
 
-    public List<Hashtag> getHashtags() {
+    public Set<Hashtag> getHashtags() {
         return hashtags;
     }
 
-    public void setHashtags(List<Hashtag> hashtags) {
+    public void setHashtags(Set<Hashtag> hashtags) {
         this.hashtags = hashtags;
     }
 

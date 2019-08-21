@@ -14,8 +14,8 @@
 <div th:fragment="header" style="font-size: 0">
     <div style="display: inline-block; width: 50%">
         <a th:href="@{/}">
-            <img style="padding-left: 20px; width: 80px; display: inline-block" th:src="@{/images/smarthome.jpg}"/>
-            <h1 style="display: inline-block; vertical-align: middle; padding-left: 20px">IoT Smart House Project</h1>
+            <img style="padding-left: 20px; width: 150px; display: inline-block" th:src="@{/images/crying.jpg}"/>
+            <h1 style="display: inline-block; vertical-align: middle; padding-left: 20px">NRAKPO project</h1>
         </a>
     </div>
 
@@ -33,23 +33,29 @@
             <a class="btn btn-primary" th:href="@{/login}" th:text="Login"></a>
         </div>
     </div>
+    <div style="text-align: right; display: inline-block; width: 50%" sec:authorize="isAuthenticated()">
+        <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/pictureUpload}">
+            <input type="submit" class="btn btn-danger" th:value="PictureUpload"/>
+        </form>
+    </div>
     <hr>
 </div>
 
 <div th:fragment="photos">
-    <div th:each="photo : ${photos}">
+    <th:block th:each="photo : ${photos}">
         <table>
             <tr>
                 <td><img th:src="${photo.url}"></td>
-            </tr>
-            <tr>
-                <td><label th:text="${photo.description}"></label></td>
-                <td><label th:text=${photo.user.username}"></label></td>
-                <td><label th:text=${photo.date}"></label></td>
-                <td><label th:each="hashtag : ${photo.hashtags}" th:text=${hashtag}"></label></td>
+                <td th:text="${photo.description}"></td>
+                <td th:text="${photo.date}"></td>
+                <td th:text="${photo.user.username}"></td>
+                <td>
+                    <th:block th:each="hashtag : ${photo.hashtags}"><label th:text="${hashtag.name} "></label>
+                    </th:block>
+                </td>
             </tr>
         </table>
-    </div>
+    </th:block>
 </div>
 
 
