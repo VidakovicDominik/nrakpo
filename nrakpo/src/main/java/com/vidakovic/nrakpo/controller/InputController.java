@@ -2,10 +2,7 @@ package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
-import com.vidakovic.nrakpo.data.entity.Photo;
-import com.vidakovic.nrakpo.data.repository.PhotoRepository;
-import com.vidakovic.nrakpo.data.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vidakovic.nrakpo.service.PhotoService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,11 +44,11 @@ import javax.validation.Valid;
 @RequestMapping("/pictureUpload")
 public class InputController {
 
-    @Autowired
-    UserRepository userRepository;
+    PhotoService photoService;
 
-    @Autowired
-    PhotoRepository photoRepository;
+    public InputController(PhotoService photoService){
+        this.photoService=photoService;
+    }
 
     @GetMapping
     public String pictureUpload(Model model){
@@ -62,7 +59,7 @@ public class InputController {
 
     @PostMapping
     public String pictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication){
-        photoRepository.save(new Photo(photo,userRepository.findById(authentication.getName()).get()));
+        photoService.insertPhoto(photo,authentication.getName());
         return "redirect:/home";
     }
 }

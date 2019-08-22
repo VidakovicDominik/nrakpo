@@ -62,6 +62,10 @@ public class Photo {
     public Photo() {
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public Long getDate() {
         return date;
     }

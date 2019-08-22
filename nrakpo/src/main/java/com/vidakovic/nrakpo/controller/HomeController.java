@@ -1,10 +1,11 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.data.entity.Hashtag;
-import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.entity.Photo;
+import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -21,15 +21,20 @@ import java.util.Set;
 public class HomeController {
 
     @Autowired
-    PhotoRepository photoRepository;
+    UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    PhotoRepository photoRepository;
+
+    PhotoService photoService;
+
+    public HomeController(PhotoService photoService){
+        this.photoService=photoService;
+    }
 
     @GetMapping("/home")
     public String showIndex(Model model) {
-        List<Photo> photos= (List<Photo>)photoRepository.findAll();
-        model.addAttribute("photos",photos);
+        model.addAttribute("photos",photoService.getAllPhotos());
         return "home";
     }
 

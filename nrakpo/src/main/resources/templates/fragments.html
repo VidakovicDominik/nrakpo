@@ -48,11 +48,8 @@
                 <td><img th:src="${photo.url}"></td>
                 <td th:text="${photo.description}"></td>
                 <td th:text="${photo.date}"></td>
-                <td th:text="${photo.user.username}"></td>
-                <td>
-                    <th:block th:each="hashtag : ${photo.hashtags}"><label th:text="${hashtag.name} "></label>
-                    </th:block>
-                </td>
+                <td th:text="${photo.username}"></td>
+                <td th:text="${photo.hashtags}"></td>
             </tr>
         </table>
     </th:block>

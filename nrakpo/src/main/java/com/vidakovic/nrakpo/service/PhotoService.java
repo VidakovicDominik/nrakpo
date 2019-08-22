@@ -1,6 +1,8 @@
 package com.vidakovic.nrakpo.service;
 
-import com.vidakovic.nrakpo.data.entity.Photo;
+import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,5 +31,7 @@ import com.vidakovic.nrakpo.data.entity.Photo;
  * @since 21-Aug-19 10:43:42
  */
 public interface PhotoService {
-    void insertPhoto(Photo photo);
+    void insertPhoto(PhotoApiModel photo, String username);
+    List<PhotoApiModel> getAllPhotos();
+    void updatePhoto(PhotoApiModel photo, String username);
 }

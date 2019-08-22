@@ -5,9 +5,10 @@
  */
 package com.vidakovic.nrakpo.controller.form;
 
-import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.User;
+import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
+import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -19,7 +20,7 @@ public class RegistrationForm {
 
     private String email;
 
-    private UserType userType=UserType.USER;
+    private UserType userType= UserType.USER;
 
     private UserPackage userPackage;
 
