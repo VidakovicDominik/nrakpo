@@ -2,11 +2,15 @@ package com.vidakovic.nrakpo.service;
 
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.Photo;
+import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,16 +44,22 @@ public class PhotoServiceImpl implements PhotoService {
 
     PhotoRepository photoRepository;
     UserRepository userRepository;
+    ConsumptionEvaluator consumptionEvaluator;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository){
+    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator){
         this.photoRepository=photoRepository;
         this.userRepository=userRepository;
+        this.consumptionEvaluator=consumptionEvaluator;
     }
-
 
     @Override
     public void insertPhoto(PhotoApiModel photo, String username) {
-        photoRepository.save(new Photo(photo,userRepository.findById(username).get()));
+
+        User user = userRepository.findById(username).get();
+        if(consumptionEvaluator.evaluate(user,getMonthlyConsumption(user))){
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
+        }
+        photoRepository.save(new Photo(photo, user));
     }
 
     @Override
@@ -69,6 +79,11 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public void updatePhoto(PhotoApiModel photo, String username) {
         photoRepository.save(new Photo(photo,userRepository.findById(username).get()));
+    }
+
+    @Override
+    public Long getMonthlyConsumption(User user) {
+        return photoRepository.countByUserAndDateBetween(user,new Date().getTime()-2629743L,new Date().getTime());
     }
 }
 
