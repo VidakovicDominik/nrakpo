@@ -45,7 +45,7 @@
     <th:block th:each="photo : ${photos}">
         <table>
             <tr>
-                <td><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></td>
+                <td><a href=".../photo/${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></a></td>
                 <td th:text="${photo.description}"></td>
                 <td th:text="${photo.date}"></td>
                 <td th:text="${photo.username}"></td>
