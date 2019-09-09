@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+<table>
+    <tr>
+        <td><a href=".../photo/${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></a></td>
+        <td th:text="${photo.description}"></td>
+        <td th:text="${photo.date}"></td>
+        <td th:text="${photo.username}"></td>
+        <td th:text="${photo.hashtags}"></td>
+        <td th:text="${photo.size}"></td>
+        <td th:text="${photo.format}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
