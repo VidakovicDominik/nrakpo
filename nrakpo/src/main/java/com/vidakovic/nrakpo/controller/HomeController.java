@@ -47,24 +47,17 @@ public class HomeController {
         hashtags.add(new Hashtag("poor bastard"));
         hashtags.add(new Hashtag("tears"));
         for (int i=0;i<5;i++){
-            save(new Photo(
+            photoRepository.save(new Photo(
                     "photo 1",
                     "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
                     "smol",
                     ImageFormat.JPEG,
                     hashtags,
-                    userRepository.findById("wbadmin").get()
+                    userRepository.findById("admin").get()
             ));
         }
 
         return "redirect:/home";
     }
-
-    @Transactional
-    private void save(Photo photo){
-        photoRepository.save(photo);
-    }
-
-
 
 }

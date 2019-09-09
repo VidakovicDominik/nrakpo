@@ -4,6 +4,7 @@ import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "USERS")
+//@DiscriminatorColumn(name = )
 public class User {
 
     @Id

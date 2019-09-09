@@ -38,6 +38,11 @@
             <input type="submit" class="btn btn-danger" th:value="PictureUpload"/>
         </form>
     </div>
+    <div  sec:authorize="hasAuthority('ROLE_ADMIN')">
+        <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/users}">
+            <input type="submit" class="btn btn-danger" th:value="ViewUsers"/>
+        </form>
+    </div>
     <hr>
 </div>
 
@@ -50,6 +55,19 @@
                 <td th:text="${photo.date}"></td>
                 <td th:text="${photo.username}"></td>
                 <td th:text="${photo.hashtags}"></td>
+            </tr>
+        </table>
+    </th:block>
+</div>
+
+<div th:fragment="users">
+    <th:block th:each="user : ${users}">
+        <table>
+            <tr>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.userPackage}"></td>
+                <td th:text="${user.accountType}"></td>
             </tr>
         </table>
     </th:block>

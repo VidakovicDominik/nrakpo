@@ -6,6 +6,7 @@
 package com.vidakovic.nrakpo.data.repository;
 
 import com.vidakovic.nrakpo.data.entity.User;
+import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -26,8 +27,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     @Override
     public void saveUserWithAuthorities(User user) {
             em.persist(user);
-        em.createNativeQuery("INSERT INTO AUTHORITIES (USERNAME, AUTHORITY) VALUES ( ?1 , 'ROLE_USER')")
+        em.createNativeQuery("INSERT INTO AUTHORITIES (USERNAME, AUTHORITY) VALUES ( ?1 , ?2)")
                 .setParameter(1, user.getUsername())
+                .setParameter(2, user.getUserType().equals(UserType.ADMINISTRATOR) ? "ROLE_ADMIN" : "ROLE_USER")
                 .executeUpdate();
     }
     

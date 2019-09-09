@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
@@ -34,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery(
                         "SELECT username, password, enabled FROM users WHERE username=?")
                 .authoritiesByUsernameQuery(
-                        "SELECT username, 'ROLE_USER' FROM authorities WHERE username=?");
+                        "SELECT username, authority FROM authorities WHERE username=?");
     }
 
     @Override
@@ -45,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").anonymous()
                 .antMatchers("/register").anonymous()
                 .antMatchers("/mock").permitAll()
+                .antMatchers("/users").hasRole("ADMIN")
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 // ignore CSRF protection and allow IFRAME for h2 console
