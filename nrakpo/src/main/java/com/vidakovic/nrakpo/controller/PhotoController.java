@@ -1,9 +1,14 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -36,9 +41,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/photo")
 public class PhotoController {
 
+    PhotoService photoService;
+
+    public PhotoController(PhotoServiceImpl photoService){
+        this.photoService=photoService;
+    }
+
     @GetMapping("/{id}")
-    public String showIndex(Model model) {
+    public String showIndex(Model model, @PathVariable Integer id) {
+        model.addAttribute("photo", photoService.getPhoto(id));
         return "photo_details";
     }
+
+    @GetMapping("/update/{id}")
+    public String showUpdatePhoto(Model model, @PathVariable Integer id) {
+        model.addAttribute("photo", photoService.getPhoto(id));
+        return "photo_update";
+    }
+
+    @PostMapping("/update")
+    public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
+        photoService.updatePhoto(photo,authentication.getName());
+        return "redirect:/home";
+    }
+
+
 }
 

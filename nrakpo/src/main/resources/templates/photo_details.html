@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments :: head"></head>
 
@@ -14,6 +14,13 @@
         <td th:text="${photo.hashtags}"></td>
         <td th:text="${photo.size}"></td>
         <td th:text="${photo.format}"></td>
+    </tr>
+    <tr>
+        <div style="text-align: right; display: inline-block; width: 50%" sec:authorize="isAuthenticated()">
+            <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{'/photo/update/'+${photo.id}}">
+                <input type="submit" class="btn btn-danger" th:value="Update"/>
+            </form>
+        </div>
     </tr>
 </table>
 

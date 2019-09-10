@@ -53,10 +53,15 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
+    public PhotoApiModel getPhoto(Integer id) {
+        return new PhotoApiModel(photoRepository.findById(id).get());
+    }
+
+    @Override
     public void insertPhoto(PhotoApiModel photo, String username) {
 
         User user = userRepository.findById(username).get();
-        if(consumptionEvaluator.evaluate(user,getMonthlyConsumption(user))){
+        if(!consumptionEvaluator.evaluate(user,getMonthlyConsumption(user))){
             throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
         }
         photoRepository.save(new Photo(photo, user));

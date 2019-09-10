@@ -32,6 +32,7 @@ import java.util.List;
  * @since 21-Aug-19 10:43:42
  */
 public interface PhotoService {
+    PhotoApiModel getPhoto(Integer id);
     void insertPhoto(PhotoApiModel photo, String username);
     List<PhotoApiModel> getAllPhotos();
     void updatePhoto(PhotoApiModel photo, String username);
