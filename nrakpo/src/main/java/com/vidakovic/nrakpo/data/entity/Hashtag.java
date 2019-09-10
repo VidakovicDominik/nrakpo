@@ -12,7 +12,7 @@ public class Hashtag {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "photo_id")
+    @JoinColumn(name = "photo_id", referencedColumnName = "id")
     private Photo photo;
 
     public Hashtag(String name) {

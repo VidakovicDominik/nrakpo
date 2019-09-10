@@ -24,8 +24,8 @@ public class Photo {
 
     private Long date;
 
-    @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Hashtag> hashtags;
+    @OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Hashtag> hashtags = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
