@@ -4,15 +4,14 @@ import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Photo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Integer id;
 
     private String description;
@@ -25,13 +24,13 @@ public class Photo {
 
     private Long date;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private Set<Hashtag> hashtags;
+    @OneToMany(mappedBy = "photo", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Hashtag> hashtags;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-    public Photo(String description, String url, String size, ImageFormat format, Set<Hashtag> hashtags, User user) {
+    public Photo(String description, String url, String size, ImageFormat format, List<Hashtag> hashtags, User user) {
         this.description = description;
         this.url = url;
         this.size = size;
@@ -51,8 +50,8 @@ public class Photo {
         this.hashtags= parseHashtags(photoModel.getHashtags());
     }
 
-    private Set<Hashtag> parseHashtags(String rawHashtags){
-        Set<Hashtag> hashtags=new HashSet<>();
+    private List<Hashtag> parseHashtags(String rawHashtags){
+        List<Hashtag> hashtags=new ArrayList<>();
         for (String ht:rawHashtags.split("#")) {
             hashtags.add(new Hashtag(ht.trim()));
         }
@@ -106,11 +105,11 @@ public class Photo {
         this.format = format;
     }
 
-    public Set<Hashtag> getHashtags() {
+    public List<Hashtag> getHashtags() {
         return hashtags;
     }
 
-    public void setHashtags(Set<Hashtag> hashtags) {
+    public void setHashtags(List<Hashtag> hashtags) {
         this.hashtags = hashtags;
     }
 

@@ -1,9 +1,6 @@
 package com.vidakovic.nrakpo.data.entity;
 
-import org.hibernate.annotations.NaturalId;
-
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Hashtag {
@@ -12,11 +9,11 @@ public class Hashtag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NaturalId
     private String name;
 
-    @ManyToMany
-    private Set<Photo> photos;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id")
+    private Photo photo;
 
     public Hashtag(String name) {
         this.name = name;
@@ -25,12 +22,12 @@ public class Hashtag {
     public Hashtag() {
     }
 
-    public Set<Photo> getPhotos() {
-        return photos;
+    public Photo getPhoto() {
+        return photo;
     }
 
-    public void setPhotos(Set<Photo> photos) {
-        this.photos = photos;
+    public void setPhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public String getName() {
