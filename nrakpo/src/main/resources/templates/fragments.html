@@ -62,19 +62,5 @@
 </div>
 
 
-<div th:fragment="users">
-    <th:block th:each="user : ${users}">
-        <table>
-            <tr>
-                <td th:text="${user.username}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.userPackage}"></td>
-                <td th:text="${user.accountType}"></td>
-            </tr>
-        </table>
-    </th:block>
-</div>
-
-
 </body>
 </html>

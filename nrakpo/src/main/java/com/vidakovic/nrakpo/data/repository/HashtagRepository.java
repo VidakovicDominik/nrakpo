@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.data.repository;
 
 import com.vidakovic.nrakpo.data.entity.Hashtag;
+import com.vidakovic.nrakpo.data.entity.Photo;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -33,5 +34,6 @@ import java.util.List;
  */
 public interface HashtagRepository extends CrudRepository<Hashtag,Integer> {
     List<Hashtag> findByNameIn(List<String> names);
+    void deleteAllByPhoto(Photo photo);
 }
 

@@ -29,7 +29,6 @@
         <div class="col-md-4 mb-3">
             <label>User package: </label>
             <select th:field="*{userPackage}" class="form-control" >
-                <option value="" >---Choose---</option>
                 <option th:each="package : ${userPackages}"
                         th:value="${package}"
                         th:text="${package}"></option>
@@ -38,7 +37,6 @@
         <div class="col-md-4 mb-3">
             <label>Account type: </label>
             <select th:field="*{accountType}" class="form-control" >
-                <option value="" >---Choose---</option>
                 <option th:each="type : ${accountTypes}"
                         th:value="${type}"
                         th:text="${type}"></option>

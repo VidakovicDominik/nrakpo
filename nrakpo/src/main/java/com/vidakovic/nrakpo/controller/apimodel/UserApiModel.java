@@ -22,6 +22,9 @@ public class UserApiModel {
         this.accountType = user.getAccountType().toString();
     }
 
+    public UserApiModel() {
+    }
+
     public String getUsername() {
         return username;
     }

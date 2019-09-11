@@ -29,7 +29,6 @@
         <div class="col-md-4 mb-3">
             <label>Format: </label>
             <select th:field="*{format}" class="form-control" >
-                <option value="" >---Choose---</option>
                 <option th:each="format : ${formats}"
                         th:value="${format}"
                         th:text="${format}"></option>

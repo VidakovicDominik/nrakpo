@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import org.springframework.security.core.Authentication;
@@ -55,7 +56,10 @@ public class PhotoController {
 
     @GetMapping("/update/{id}")
     public String showUpdatePhoto(Model model, @PathVariable Integer id) {
-        model.addAttribute("photo", photoService.getPhoto(id));
+        PhotoApiModel photo = photoService.getPhoto(id);
+        model.addAttribute("photo", photo);
+        model.addAttribute("selectedFormat", photo.getFormat());
+        model.addAttribute("formats", ImageFormat.values());
         return "photo_update";
     }
 

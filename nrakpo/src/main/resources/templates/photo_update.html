@@ -32,8 +32,15 @@
                 <td><input type="text" th:value="${photo.size}" name="size"></td>
             </tr>
             <tr>
-                <td><label>Format</label></td>
-                <td><input type="text" th:value="${photo.format}" name="format"></td>
+                <div class="col-md-4 mb-3">
+                    <label>Format: </label>
+                    <select id="format" name="format" class="form-control" >
+                        <option th:each="format : ${formats}"
+                                th:value="${format}"
+                                th:text="${format}"
+                        ></option>
+                    </select>
+                </div>
             </tr>
             <tr>
                 <td><input type="submit" value="Update"></td>

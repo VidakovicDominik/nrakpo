@@ -37,27 +37,17 @@ public class Photo {
         this.format = format;
         this.date = new Date().getTime();
         this.hashtags = hashtags;
+        for (Hashtag hashtag :
+                hashtags) {
+            hashtag.setPhoto(this);
+        }
         this.user = user;
     }
 
-    public Photo(PhotoApiModel photoModel, User user){
-        this.description=photoModel.getDescription();
-        this.format=ImageFormat.valueOf(photoModel.getFormat());
-        this.size=photoModel.getSize();
-        this.url=photoModel.getUrl();
-        this.user=user;
-        this.date= new Date().getTime();
-        this.hashtags= parseHashtags(photoModel.getHashtags());
+    public void addHashtag(Hashtag hashtag){
+        this.hashtags.add(hashtag);
+        hashtag.setPhoto(this);
     }
-
-    private List<Hashtag> parseHashtags(String rawHashtags){
-        List<Hashtag> hashtags=new ArrayList<>();
-        for (String ht:rawHashtags.split("#")) {
-            hashtags.add(new Hashtag(ht.trim()));
-        }
-        return hashtags;
-    }
-
     public Photo() {
     }
 
@@ -111,6 +101,10 @@ public class Photo {
 
     public void setHashtags(List<Hashtag> hashtags) {
         this.hashtags = hashtags;
+        for (Hashtag hashtag :
+                hashtags) {
+            hashtag.setPhoto(this);
+        }
     }
 
     public User getUser() {

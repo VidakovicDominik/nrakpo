@@ -58,6 +58,7 @@ public class HomeController {
             Hashtag hashtag=new Hashtag();
             hashtag.setName(""+i);
             hashtag.setPhoto(photo);
+            hashtags.add(hashtag);
             hashtagRepository.save(hashtag);
         }
         photoRepository.save(photo);
