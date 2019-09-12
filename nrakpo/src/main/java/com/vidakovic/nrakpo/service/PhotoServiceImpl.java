@@ -48,7 +48,7 @@ public class PhotoServiceImpl implements PhotoService {
                 new Photo(
                         photo.getDescription(),
                         photo.getUrl(),
-                        photo.getSize(),
+                        photo.getSizeX()+"X"+photo.getSizeY(),
                         ImageFormat.valueOf(photo.getFormat()),
                         parseHashtags(photo.getHashtags()),
                         user));
@@ -85,7 +85,7 @@ public class PhotoServiceImpl implements PhotoService {
         oldPhoto.setDescription(photo.getDescription());
         oldPhoto.setFormat(ImageFormat.valueOf(photo.getFormat()));
         oldPhoto.setUrl(photo.getUrl());
-        oldPhoto.setSize(photo.getSize());
+        oldPhoto.setSize(photo.getSizeX()+"X"+photo.getSizeY());
         oldPhoto.setHashtags(parseHashtags(photo.getHashtags()));
         photoRepository.save(oldPhoto);
     }

@@ -6,32 +6,6 @@ import com.vidakovic.nrakpo.data.entity.Photo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * <p>
- * <b>Title: Photo  </b>
- * </p>
- * <p>
- * <b> Description:
- *
- *
- * </b>
- * </p>
- * <p>
- * <b>Copyright:</b> Copyright (c) ETK 2019
- * </p>
- * <p>
- * <b>Company:</b> Ericsson Nikola Tesla d.d.
- * </p>
- *
- * @author ezviddo
- * @version PA1
- * <p>
- * <b>Version History:</b>
- * </p>
- * <br>
- * PA1 21-Aug-19
- * @since 21-Aug-19 10:48:42
- */
 public class PhotoApiModel {
     private Integer id;
 
@@ -39,7 +13,9 @@ public class PhotoApiModel {
 
     private String url;
 
-    private String size;
+    private String sizeX;
+
+    private String sizeY;
 
     private String format;
 
@@ -49,11 +25,12 @@ public class PhotoApiModel {
 
     private String username;
 
-    public PhotoApiModel(Integer id, String description, String url, String size, String format, String hashtags, String date, String username) {
+    public PhotoApiModel(Integer id, String description, String url, String sizeX, String sizeY, String format, String hashtags, String date, String username) {
         this.id = id;
         this.description = description;
         this.url = url;
-        this.size = size;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
         this.format = format;
         this.hashtags = hashtags;
         this.date = date;
@@ -64,7 +41,8 @@ public class PhotoApiModel {
         this.id=photo.getId();
         this.description=photo.getDescription();
         this.url=photo.getUrl();
-        this.size=photo.getSize();
+        this.sizeX=photo.getSize().split("X")[0];
+        this.sizeY=photo.getSize().split("X")[1];
         this.format=photo.getFormat().toString();
         Date date=new Date(photo.getDate());
         SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yy");
@@ -121,12 +99,20 @@ public class PhotoApiModel {
         this.url = url;
     }
 
-    public String getSize() {
-        return size;
+    public String getSizeX() {
+        return sizeX;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setSizeX(String sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public String getSizeY() {
+        return sizeY;
+    }
+
+    public void setSizeY(String sizeY) {
+        this.sizeY = sizeY;
     }
 
     public String getFormat() {
