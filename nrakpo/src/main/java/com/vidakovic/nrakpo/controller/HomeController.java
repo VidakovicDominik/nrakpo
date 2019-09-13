@@ -8,6 +8,8 @@ import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -36,9 +38,14 @@ public class HomeController {
         this.photoService=photoService;
     }
 
+    @GetMapping
+    public String showIndex() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
-    public String showIndex(Model model) {
-        model.addAttribute("photos",photoService.getAllPhotos());
+    public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model) {
+        model.addAttribute("photos",photoService.getAllPhotos(pageable));
         return "home";
     }
 

@@ -8,6 +8,8 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +66,9 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public List<PhotoApiModel> getAllPhotos() {
-        return parsePhotos(photoRepository.findAll());
+    public Page<Photo> getAllPhotos(Pageable pageable) {
+        return photoRepository.findAll(pageable);
+//        return parsePhotos(photoRepository.findAll(pageable));
     }
 
     private List<PhotoApiModel> parsePhotos(Iterable<Photo> photos) {
@@ -89,6 +92,7 @@ public class PhotoServiceImpl implements PhotoService {
         oldPhoto.setHashtags(parseHashtags(photo.getHashtags()));
         photoRepository.save(oldPhoto);
     }
+
 
     @Override
     public Long getMonthlyConsumption(User user) {

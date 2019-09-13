@@ -12,6 +12,15 @@
 </head>
 <body>
 <div th:fragment="header" style="font-size: 0">
+    <style>
+table{width:100%;}
+table td, table th { border: 1px solid grey;}
+table th { background: #eee;}
+.pagination-div{user-select: none;}
+.pagination-div span{border-radius:3px;border:1px solid #999;
+   padding:5px;margin:10px 0px 0px 10px;display:inline-block}
+span.selected{background:#ccf;}
+</style>
     <div style="display: inline-block; width: 50%">
         <a th:href="@{/}">
             <img style="padding-left: 20px; width: 150px; display: inline-block" th:src="@{/images/crying.jpg}"/>
@@ -59,6 +68,21 @@
             </tr>
         </table>
     </th:block>
+
+    <div class="pagination-div">
+    <span th:if="${page.hasPrevious()}">
+        <a th:href="@{/employees(page=${page.number-1},size=${page.size})}">Previous</a>
+    </span>
+        <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+            <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+            <span th:unless="${page.number == i}">
+             <a th:href="@{/employees(page=${i},size=${page.size})}">[[${i}+1]]</a>
+        </span>
+        </th:block>
+        <span th:if="${page.hasNext()}">
+        <a th:href="@{/employees(page=${page.number+1},size=${page.size})}">Next</a>
+    </span>
+    </div>
 </div>
 
 
