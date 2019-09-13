@@ -7,7 +7,7 @@
 
 <table>
     <tr>
-        <td><a href=".../photo/${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></a></td>
+        <td><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></td>
         <td th:text="${photo.description}"></td>
         <td th:text="${photo.date}"></td>
         <td th:text="${photo.username}"></td>
@@ -17,8 +17,11 @@
     </tr>
     <tr>
         <div sec:authorize="isAuthenticated()">
-            <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{'/photo/update/'+${photo.id}}">
+            <form  method="GET" th:action="@{'/photo/update/'+${photo.id}}">
                 <input type="submit" class="btn btn-danger" th:value="Update"/>
+            </form>
+            <form  method="GET" th:action="@{'/photo/download/'+${photo.id}}">
+                <input type="submit" class="btn btn-danger" th:value="Download"/>
             </form>
         </div>
     </tr>

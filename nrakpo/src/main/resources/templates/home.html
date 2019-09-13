@@ -11,6 +11,9 @@
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
 
+    <form  method="GET" th:action="@{'/photo/'}">
+        <input type="text" id="criteria" name="criteria"/>
+    </form>
     <th:block th:each="photo : ${page.content}">
         <table>
             <tr>
