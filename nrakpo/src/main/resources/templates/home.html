@@ -10,7 +10,34 @@
     <h1 th:text="Home"></h1>
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
-    <div th:replace="fragments :: photos"></div>
+
+    <th:block th:each="photo : ${page.content}">
+        <table>
+            <tr>
+                <td><a th:href="'/photo/'+${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block"
+                                                            th:src="${photo.url}"></a></td>
+                <td th:text="${photo.description}"></td>
+                <td th:text="${photo.date}"></td>
+                <td th:text="${photo.username}"></td>
+                <td th:text="${photo.hashtags}"></td>
+            </tr>
+        </table>
+    </th:block>
+
+    <div class="pagination-div">
+    <span th:if="${page.hasPrevious()}">
+        <a th:href="@{/employees(page=${page.number-1},size=${page.size})}">Previous</a>
+    </span>
+        <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+            <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+            <span th:unless="${page.number == i}">
+             <a th:href="@{/employees(page=${i},size=${page.size})}">[[${i}+1]]</a>
+        </span>
+        </th:block>
+        <span th:if="${page.hasNext()}">
+        <a th:href="@{/employees(page=${page.number+1},size=${page.size})}">Next</a>
+    </span>
+    </div>
 </div>
 
 </body>

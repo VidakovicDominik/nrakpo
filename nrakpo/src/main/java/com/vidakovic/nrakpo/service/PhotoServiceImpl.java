@@ -66,18 +66,12 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Override
-    public Page<Photo> getAllPhotos(Pageable pageable) {
-        return photoRepository.findAll(pageable);
-//        return parsePhotos(photoRepository.findAll(pageable));
+    public Page<PhotoApiModel> getAllPhotos(Pageable pageable) {
+        return photoRepository.findAll(pageable).map(this::parsePhoto);
     }
 
-    private List<PhotoApiModel> parsePhotos(Iterable<Photo> photos) {
-        List<PhotoApiModel> photoApiModels = new ArrayList<>();
-        for (Photo photo :
-                photos) {
-            photoApiModels.add(new PhotoApiModel(photo));
-        }
-        return photoApiModels;
+    private PhotoApiModel parsePhoto(Photo photo) {
+        return new PhotoApiModel(photo);
     }
 
     @Override

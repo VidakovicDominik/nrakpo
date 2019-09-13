@@ -1,7 +1,6 @@
 package com.vidakovic.nrakpo.service;
 
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
-import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,7 @@ import org.springframework.data.domain.Pageable;
 public interface PhotoService {
     PhotoApiModel getPhoto(Integer id);
     void insertPhoto(PhotoApiModel photo, String username);
-    Page<Photo> getAllPhotos(Pageable pageable);
+    Page<PhotoApiModel> getAllPhotos(Pageable pageable);
     void updatePhoto(PhotoApiModel photo, String username);
     Long getMonthlyConsumption(User user);
 }

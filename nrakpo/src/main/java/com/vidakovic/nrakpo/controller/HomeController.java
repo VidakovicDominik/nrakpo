@@ -45,7 +45,7 @@ public class HomeController {
 
     @GetMapping("/home")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model) {
-        model.addAttribute("photos",photoService.getAllPhotos(pageable));
+        model.addAttribute("page",photoService.getAllPhotos(pageable));
         return "home";
     }
 
