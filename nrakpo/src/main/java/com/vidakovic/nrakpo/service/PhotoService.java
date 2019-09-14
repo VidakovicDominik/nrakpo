@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.service;
 
 import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
+import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.User;
 import org.springframework.data.domain.Page;
@@ -41,4 +42,5 @@ public interface PhotoService {
     void updatePhoto(PhotoApiModel photo, String username);
     Long getMonthlyConsumption(User user);
     List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm);
+    FilteredPhoto downloadPhoto(Integer id, List<String> filters);
 }

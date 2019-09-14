@@ -14,20 +14,7 @@
         <td><label th:text="${photo.hashtags}"></label></td>
         <td><label  th:text="${photo.sizeX}"></label><label>X</label><label th:text="${photo.sizeY}"></label></td>
         <td><label  th:text="${photo.format}"></label></td>
-    </tr>
-    <tr>
-        <div sec:authorize="isAuthenticated()">
-            <form  method="GET" th:action="@{'/photo/update/'+${photo.id}}">
-                <input type="submit" class="btn btn-danger" th:value="Update"/>
-            </form>
-            <form  method="POST" th:action="@{'/photo/download/'+${photo.id}}">
-                <th:block th:each="filter : ${filters}">
-                    <input type="checkbox" name="pickedFilters" th:value="${filter}"/>
-                    <label th:text="${filter}"></label>
-                </th:block>
-                <input type="submit" class="btn btn-danger" th:value="Download"/>
-            </form>
-        </div>
+        <td><label>Please imagine the photo has the following filters applied:</label><label th:text="${photo.appliedFilters}"></label></td>
     </tr>
 </table>
 

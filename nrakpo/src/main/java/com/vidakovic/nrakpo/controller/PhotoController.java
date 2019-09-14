@@ -1,16 +1,19 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
+import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.PhotoServiceImpl;
+import com.vidakovic.nrakpo.service.cor.FilterType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 /**
  * <p>
@@ -50,8 +53,9 @@ public class PhotoController {
     }
 
     @GetMapping("/{id}")
-    public String showIndex(Model model, @PathVariable Integer id) {
+    public String showPhotoDetails(Model model, @PathVariable Integer id) {
         model.addAttribute("photo", photoService.getPhoto(id));
+        model.addAttribute("filters", FilterType.values());
         return "photo_details";
     }
 
@@ -76,6 +80,11 @@ public class PhotoController {
         return "redirect:/home";
     }
 
+    @PostMapping("/download/{id}")
+    public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters){
+        model.addAttribute("photo",photoService.downloadPhoto(id, Arrays.asList(filters)));
+        return "photo_download";
+    }
 
 }
 

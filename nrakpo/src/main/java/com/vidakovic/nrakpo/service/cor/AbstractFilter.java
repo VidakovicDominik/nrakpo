@@ -1,5 +1,9 @@
 package com.vidakovic.nrakpo.service.cor;
 
+import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
+
+import java.util.List;
+
 public abstract class AbstractFilter {
 
     protected AbstractFilter nextFilter;
@@ -8,14 +12,15 @@ public abstract class AbstractFilter {
         this.nextFilter=filter;
     }
 
-    public void filterPhoto(FilteredPhoto photo){
-        applyFilter(photo);
+    public FilteredPhoto filterPhoto(FilteredPhoto photo, List<String> filters){
+        applyFilter(photo, filters);
 
         if(nextFilter!=null){
-            nextFilter.filterPhoto(photo);
+            nextFilter.filterPhoto(photo,filters);
         }
+        return photo;
     }
 
-    protected abstract void applyFilter(FilteredPhoto photo);
+    protected abstract void applyFilter(FilteredPhoto photo,List<String> filters);
 }
 

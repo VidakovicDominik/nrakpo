@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.service;
 
 import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
+import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
@@ -9,6 +10,7 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.cor.FilterService;
 import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,13 +32,15 @@ public class PhotoServiceImpl implements PhotoService {
     ConsumptionEvaluator consumptionEvaluator;
     HashtagRepository hashtagRepository;
     CriteriaService criteriaService;
+    FilterService filterService;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, CriteriaService criteriaService) {
+    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, CriteriaService criteriaService, FilterService filterService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.consumptionEvaluator = consumptionEvaluator;
         this.hashtagRepository = hashtagRepository;
         this.criteriaService = criteriaService;
+        this.filterService = filterService;
     }
 
     @Override
@@ -101,6 +105,12 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm){
         return criteriaService.getPhotosByCriteria(criteriaForm).stream().map(x->new PhotoApiModel(x)).collect(Collectors.toList());
+    }
+
+    @Override
+    public FilteredPhoto downloadPhoto(Integer id, List<String> filters) {
+        FilteredPhoto filteredPhoto=new FilteredPhoto(photoRepository.findById(id).get());
+        return filterService.getFilteredPhoto(filteredPhoto,filters);
     }
 }
 
