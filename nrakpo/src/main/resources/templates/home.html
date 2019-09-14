@@ -4,32 +4,43 @@
 <head th:replace="fragments :: head"></head>
 
 <body>
-
-<div class="container-fluid">
-    <div th:replace="fragments :: header"></div>
+    <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
+<div class="container-fluid1">
     <h1 th:text="Home"></h1>
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
 
-    <form  method="POST" th:object="${criteriaForm}" th:action="@{'/photo/filter'}">
+    <form method="POST" th:object="${criteriaForm}" th:action="@{'/photo/filter'}">
+        <div class="filters"> 
         <label>Author: </label>
         <input type="text" th:field="*{author}" class="form-control" ></input>
-
+        </div>
+        <div class="filters"> 
         <label>Hashtags: </label>
         <input type="text" th:field="*{hashtags}" class="form-control" ></input>
-
+        </div>
+        <div class="velicina">
+        <div class="filters"> 
         <label>Size: </label>
         <input type="text" th:field="*{sizeX}" class="form-control" ></input>
+        </div>
+        <div class="filters"> 
         <label>X</label>
         <input type="text" th:field="*{sizeY}" class="form-control" ></input>
-
+        </div>
+        </div>
+        <div class="datum">
+        <div class="filters1"> 
         <label>Date from: </label>
         <input type="text" th:field="*{dateFrom}" class="form-control" ></input>
-
+        </div>
+        <div class="filters1"> 
         <label>Date to: </label>
         <input type="text" th:field="*{dateTo}" class="form-control" ></input>
+        </div>
+        </div>
 
-        <input type="submit" value="Filter">
+        <input class="filter-button" type="submit" value="Filter"  style="clear: both;">
     </form>
     <th:block th:each="photo : ${page.content}">
         <table>

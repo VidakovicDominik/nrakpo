@@ -4,9 +4,8 @@
 <head th:replace="fragments :: head"></head>
 
 <body>
-
+        <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
 <div class="container-fluid">
-    <div th:replace="fragments :: header"></div>
     <h1 th:text="Home"></h1>
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>

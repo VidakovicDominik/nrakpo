@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments :: head" ></head>
 <body>
+<div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
 <div class="container-fluid">
-    <div th:replace="fragments :: header" ></div>
     <h1 text="Registration"></h1>
     <div th:if="${param.error}" class="validation-error" text="Unable to register."></div>
     <form method="POST" th:action="@{/register}" th:object="${user}">

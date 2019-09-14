@@ -12,15 +12,27 @@
 
 </head>
 <body>
-<div th:fragment="header" style="font-size: 0;margin: 0px; background-color: #fff;">
-    <div style="display: inline-block; width: 50%">
-        <a th:href="@{/}">
-            <img style="padding-left: 20px; width: 150px;;float: left;" th:src="@{/images/crying.jpg}"/>
-            <h1 style="display: inline-block; vertical-align: middle; padding-left: 20px">NRAKPO project</h1>
-        </a>
+<div th:fragment="header" style="font-size: 0;margin: 0px; background-color: #fff; padding-top:15px;">
+        <div class="media1" >
+                <a th:href="@{/}">
+                    <img style="padding-left: 20px; width: 150px;float: left;" th:src="@{/images/crying.jpg}"/>
+                    <h1 style="display: inline-block; vertical-align: middle; padding-left: 20px">NRAKPO project</h1>
+                </a>
+            </div>
+            
+    <div class="media2" sec:authorize="isAuthenticated()">
+            <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/pictureUpload}">
+                <input type="submit" class="btn btn-danger" th:value="PictureUpload"/>
+            </form>
     </div>
 
-    <div style="text-align: right; display: inline-block; width: 50%" sec:authorize="isAuthenticated()">
+    <div class="media3" sec:authorize="hasAuthority('ROLE_ADMIN')">
+        <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/users}">
+            <input type="submit" class="btn btn-danger" th:value="ViewUsers"/>
+        </form>
+    </div>
+
+    <div class="media4" sec:authorize="isAuthenticated()">
         <form style="padding-right: 20px; font-size: 18px" method="POST" th:action="@{/logout}">
             <span style="margin-right: 5px;" th:text="Yo"></span>
             <span sec:authentication="name"
@@ -28,22 +40,13 @@
             <input type="submit" class="btn btn-danger" th:value="Logout"/>
         </form>
     </div>
-    <div style="text-align: right; display: inline-block; width: 50%" sec:authorize="!isAuthenticated()"
+    <div class="media5"  sec:authorize="!isAuthenticated()"
          th:if="${#httpServletRequest.requestURI != '/login'}">
         <div style="padding-right: 20px;">
-            <a class="btn btn-primary" th:href="@{/login}" th:text="Login"></a>
+            <a class="btn btn-primary" th:href="@{/login}" th:text="Login" style="width: 150px;"></a>
         </div>
     </div>
-    <div style="text-align: right; display: inline-block; width: 50%" sec:authorize="isAuthenticated()">
-        <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/pictureUpload}">
-            <input type="submit" class="btn btn-danger" th:value="PictureUpload"/>
-        </form>
-    </div>
-    <div sec:authorize="hasAuthority('ROLE_ADMIN')">
-        <form style="padding-right: 20px; font-size: 18px" method="GET" th:action="@{/users}">
-            <input type="submit" class="btn btn-danger" th:value="ViewUsers"/>
-        </form>
-    </div>
+
     <hr>
 </div>
 
