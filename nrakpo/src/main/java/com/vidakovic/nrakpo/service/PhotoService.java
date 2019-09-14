@@ -1,9 +1,12 @@
 package com.vidakovic.nrakpo.service;
 
+import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * <p>
@@ -37,4 +40,5 @@ public interface PhotoService {
     Page<PhotoApiModel> getAllPhotos(Pageable pageable);
     void updatePhoto(PhotoApiModel photo, String username);
     Long getMonthlyConsumption(User user);
+    List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm);
 }

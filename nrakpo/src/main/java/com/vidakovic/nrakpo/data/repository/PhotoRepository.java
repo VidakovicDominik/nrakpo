@@ -10,6 +10,8 @@ import java.util.Set;
 
 public interface PhotoRepository extends PagingAndSortingRepository<Photo, Integer> {
     List<Photo> findAllByHashtagsAndSizeAndDateBetweenAndUser(Set<Hashtag> hashtags, String size, Long date1, Long date2, User user);
-
+    List<Photo> findByUser(User user);
     Long countByUserAndDateBetween(User user, Long date1, Long date2);
+    List<Photo> findByDateBetween(Long date1, Long date2);
+    List<Photo> findBySize(String size);
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+<div class="container-fluid">
+    <div th:replace="fragments :: header"></div>
+    <h1 th:text="Home"></h1>
+    <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
+    <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
+
+    <th:block th:each="photo : ${photos}">
+        <table>
+            <tr>
+                <td><a th:href="'/photo/'+${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block"
+                                                            th:src="${photo.url}"></a></td>
+                <td th:text="${photo.description}"></td>
+                <td th:text="${photo.date}"></td>
+                <td th:text="${photo.username}"></td>
+                <td th:text="${photo.hashtags}"></td>
+            </tr>
+        </table>
+    </th:block>
+</div>
+
+</body>
+</html>

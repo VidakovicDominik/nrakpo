@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
@@ -61,6 +62,12 @@ public class PhotoController {
         model.addAttribute("selectedFormat", photo.getFormat());
         model.addAttribute("formats", ImageFormat.values());
         return "photo_update";
+    }
+
+    @PostMapping("/filter")
+    public String filterPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm){
+        model.addAttribute("photos", photoService.filterPhotos(criteriaForm));
+        return "filtered_view";
     }
 
     @PostMapping("/update")

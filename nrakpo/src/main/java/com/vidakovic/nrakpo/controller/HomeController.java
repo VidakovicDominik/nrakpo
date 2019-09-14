@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
@@ -46,29 +47,32 @@ public class HomeController {
     @GetMapping("/home")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model) {
         model.addAttribute("page",photoService.getAllPhotos(pageable));
+        model.addAttribute("criteriaForm", new CriteriaForm());
         return "home";
     }
 
     @Transactional
     @GetMapping("/mock")
     public String mock(Model model){
-        List<Hashtag> hashtags=new ArrayList<>();
-        Photo photo=new Photo(
-                "photo 1",
-                "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
-                "50X50",
-                ImageFormat.JPEG,
-                hashtags,
-                userRepository.findById("admin").get()
-        );
-        for(int i=0;i<5;i++){
-            Hashtag hashtag=new Hashtag();
-            hashtag.setName(""+i);
-            hashtag.setPhoto(photo);
-            hashtags.add(hashtag);
-            hashtagRepository.save(hashtag);
+        for(int j=21;j>=0;j--) {
+            List<Hashtag> hashtags=new ArrayList<>();
+            Photo photo = new Photo(
+                    "photo 1",
+                    "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
+                    "50X50",
+                    ImageFormat.JPEG,
+                    hashtags,
+                    userRepository.findById("admin").get()
+            );
+            for (int i = 0; i < 5; i++) {
+                Hashtag hashtag = new Hashtag();
+                hashtag.setName(""+j + i);
+                hashtag.setPhoto(photo);
+                hashtags.add(hashtag);
+                hashtagRepository.save(hashtag);
+            }
+            photoRepository.save(photo);
         }
-        photoRepository.save(photo);
         return "redirect:/home";
     }
 

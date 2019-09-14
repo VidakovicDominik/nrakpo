@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.service;
 
+import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
@@ -8,6 +9,7 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.criteria.FilterService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PhotoServiceImpl implements PhotoService {
@@ -26,12 +29,14 @@ public class PhotoServiceImpl implements PhotoService {
     UserRepository userRepository;
     ConsumptionEvaluator consumptionEvaluator;
     HashtagRepository hashtagRepository;
+    FilterService filterService;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository) {
+    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, FilterService filterService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.consumptionEvaluator = consumptionEvaluator;
         this.hashtagRepository = hashtagRepository;
+        this.filterService = filterService;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class PhotoServiceImpl implements PhotoService {
 
         User user = userRepository.findById(username).get();
         if (!consumptionEvaluator.evaluate(user, getMonthlyConsumption(user))) {
-            throw new HttpClientErrorException(HttpStatus.FORBIDDEN);
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "You can't upload any more pictures this month");
         }
         photoRepository.save(
                 new Photo(
@@ -91,6 +96,11 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public Long getMonthlyConsumption(User user) {
         return photoRepository.countByUserAndDateBetween(user, new Date().getTime() - 2629743L, new Date().getTime());
+    }
+
+    @Override
+    public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm){
+        return filterService.getFilteredPhotos(criteriaForm).stream().map(x->new PhotoApiModel(x)).collect(Collectors.toList());
     }
 }
 

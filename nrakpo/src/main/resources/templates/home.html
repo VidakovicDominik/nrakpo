@@ -11,8 +11,25 @@
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
 
-    <form  method="GET" th:action="@{'/photo/'}">
-        <input type="text" id="criteria" name="criteria"/>
+    <form  method="POST" th:object="${criteriaForm}" th:action="@{'/photo/filter'}">
+        <label>Author: </label>
+        <input type="text" th:field="*{author}" class="form-control" ></input>
+
+        <label>Hashtags: </label>
+        <input type="text" th:field="*{hashtags}" class="form-control" ></input>
+
+        <label>Size: </label>
+        <input type="text" th:field="*{sizeX}" class="form-control" ></input>
+        <label>X</label>
+        <input type="text" th:field="*{sizeY}" class="form-control" ></input>
+
+        <label>Date from: </label>
+        <input type="text" th:field="*{dateFrom}" class="form-control" ></input>
+
+        <label>Date to: </label>
+        <input type="text" th:field="*{dateTo}" class="form-control" ></input>
+
+        <input type="submit" value="Filter">
     </form>
     <th:block th:each="photo : ${page.content}">
         <table>
@@ -34,11 +51,11 @@
         <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
             <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
             <span th:unless="${page.number == i}">
-             <a th:href="@{/employees(page=${i},size=${page.size})}">[[${i}+1]]</a>
+             <a th:href="@{/home(page=${i},size=${page.size})}">[[${i}+1]]</a>
         </span>
         </th:block>
         <span th:if="${page.hasNext()}">
-        <a th:href="@{/employees(page=${page.number+1},size=${page.size})}">Next</a>
+        <a th:href="@{/home(page=${page.number+1},size=${page.size})}">Next</a>
     </span>
     </div>
 </div>
