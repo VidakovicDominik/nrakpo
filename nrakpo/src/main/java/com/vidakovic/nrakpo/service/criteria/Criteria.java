@@ -5,6 +5,6 @@ import com.vidakovic.nrakpo.data.entity.Photo;
 
 import java.util.List;
 
-public interface Filter {
-    public List<Photo> filterPhotos(List<Photo> photos);
+public interface Criteria {
+    public List<Photo> criteriaCheck(List<Photo> photos);
 }

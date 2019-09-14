@@ -4,20 +4,20 @@ import com.vidakovic.nrakpo.data.entity.Photo;
 
 import java.util.List;
 
-public class OrCriteria implements Filter {
+public class OrCriteria implements Criteria {
 
-    private Filter Filter;
-    private Filter otherFilter;
+    private Criteria Criteria;
+    private Criteria otherCriteria;
 
-    public OrCriteria(Filter Filter, Filter otherFilter) {
-        this.Filter = Filter;
-        this.otherFilter = otherFilter;
+    public OrCriteria(Criteria Criteria, Criteria otherCriteria) {
+        this.Criteria = Criteria;
+        this.otherCriteria = otherCriteria;
     }
 
     @Override
-    public List<Photo> filterPhotos(List<Photo> Photos) {
-        List<Photo> firstFilterItems = Filter.filterPhotos(Photos);
-        List<Photo> otherFilterItems = otherFilter.filterPhotos(Photos);
+    public List<Photo> criteriaCheck(List<Photo> Photos) {
+        List<Photo> firstFilterItems = Criteria.criteriaCheck(Photos);
+        List<Photo> otherFilterItems = otherCriteria.criteriaCheck(Photos);
 
         for (Photo Photo : otherFilterItems) {
             if(!firstFilterItems.contains(Photo)){

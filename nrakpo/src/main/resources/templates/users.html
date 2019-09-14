@@ -14,10 +14,10 @@
     <th:block th:each="user : ${users}">
         <table>
             <tr>
-                <td th:text="${user.username}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.userPackage}"></td>
-                <td th:text="${user.accountType}"></td>
+                <td><label  th:text="${user.username}"></label></td>
+                <td><label  th:text="${user.email}"></label></td>
+                <td><label  th:text="${user.userPackage}"></label></td>
+                <td><label  th:text="${user.accountType}"></label></td>
                 <td>
                     <form method="GET" th:action="@{'/users/update/'+${user.username}}">
                         <input type="submit" class="btn btn-danger" th:value="Update"/>

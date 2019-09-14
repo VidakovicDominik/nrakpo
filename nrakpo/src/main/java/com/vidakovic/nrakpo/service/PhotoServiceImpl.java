@@ -9,7 +9,7 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
-import com.vidakovic.nrakpo.service.criteria.FilterService;
+import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,14 +29,14 @@ public class PhotoServiceImpl implements PhotoService {
     UserRepository userRepository;
     ConsumptionEvaluator consumptionEvaluator;
     HashtagRepository hashtagRepository;
-    FilterService filterService;
+    CriteriaService criteriaService;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, FilterService filterService) {
+    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, CriteriaService criteriaService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.consumptionEvaluator = consumptionEvaluator;
         this.hashtagRepository = hashtagRepository;
-        this.filterService = filterService;
+        this.criteriaService = criteriaService;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm){
-        return filterService.getFilteredPhotos(criteriaForm).stream().map(x->new PhotoApiModel(x)).collect(Collectors.toList());
+        return criteriaService.getPhotosByCriteria(criteriaForm).stream().map(x->new PhotoApiModel(x)).collect(Collectors.toList());
     }
 }
 

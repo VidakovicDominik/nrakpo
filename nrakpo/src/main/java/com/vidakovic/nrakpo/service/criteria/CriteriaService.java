@@ -8,25 +8,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FilterService {
+public class CriteriaService {
 
     PhotoRepository photoRepository;
 
-    public FilterService(PhotoRepository photoRepository) {
+    public CriteriaService(PhotoRepository photoRepository) {
         this.photoRepository = photoRepository;
     }
 
-    public List<Photo> getFilteredPhotos(CriteriaForm criteriaForm) {
+    public List<Photo> getPhotosByCriteria(CriteriaForm criteriaForm) {
         List<Photo> allPhotos=(List<Photo>)photoRepository.findAll();
         return new OrCriteria(
                 new OrCriteria(
-                        new AuthorFilter(criteriaForm.getAuthor()),
-                        new DateFilter(criteriaForm.getDateFrom(),criteriaForm.getDateTo())
+                        new AuthorCriteria(criteriaForm.getAuthor()),
+                        new DateCriteria(criteriaForm.getDateFrom(),criteriaForm.getDateTo())
                 ),
                 new OrCriteria(
-                        new SizeFilter(criteriaForm.getSizeX()+"X"+criteriaForm.getSizeY()),
-                        new HashtagFilter(criteriaForm.getHashtags())
+                        new SizeCriteria(criteriaForm.getSizeX()+"X"+criteriaForm.getSizeY()),
+                        new HashtagCriteria(criteriaForm.getHashtags())
                 )
-        ).filterPhotos(allPhotos);
+        ).criteriaCheck(allPhotos);
     }
 }
