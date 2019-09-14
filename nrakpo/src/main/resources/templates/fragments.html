@@ -6,15 +6,16 @@
 
     <link th:href="@{/css/libs/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/core.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 
     <script th:src="@{/js/http.js}"></script>
 
 </head>
 <body>
-<div th:fragment="header" style="font-size: 0">
+<div th:fragment="header" style="font-size: 0;margin: 0px; background-color: #fff;">
     <div style="display: inline-block; width: 50%">
         <a th:href="@{/}">
-            <img style="padding-left: 20px; width: 150px; display: inline-block" th:src="@{/images/crying.jpg}"/>
+            <img style="padding-left: 20px; width: 150px;;float: left;" th:src="@{/images/crying.jpg}"/>
             <h1 style="display: inline-block; vertical-align: middle; padding-left: 20px">NRAKPO project</h1>
         </a>
     </div>
