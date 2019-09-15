@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: head"></head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <body>
     <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
@@ -10,7 +12,7 @@
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
 
-    <form method="POST" th:object="${criteriaForm}" th:action="@{'/photo/filter'}">
+    <form method="POST" th:object="${criteriaForm}" th:action="@{'/photo/filter'}" style="padding-bottom: 15px;">
         <div class="filters"> 
         <label>Author: </label>
         <input type="text" th:field="*{author}" class="form-control" ></input>
@@ -21,11 +23,11 @@
         </div>
         <div class="velicina">
         <div class="filters"> 
-        <label>Size: </label>
+        <label>Size X: </label>
         <input type="text" th:field="*{sizeX}" class="form-control" ></input>
         </div>
         <div class="filters"> 
-        <label>X</label>
+        <label>Size Y:</label>
         <input type="text" th:field="*{sizeY}" class="form-control" ></input>
         </div>
         </div>
@@ -42,20 +44,27 @@
 
         <input class="filter-button" type="submit" value="Filter"  style="clear: both;">
     </form>
+</div>
+<div class="container-fluid2">
     <th:block th:each="photo : ${page.content}">
-        <table>
+        <table style="border: 1px solid #e6e6e6;margin-top: 20px; background-color: #fff">
             <tr>
-                <td><a th:href="'/photo/'+${photo.id}"><img style="padding-left: 20px; width: 250px; display: inline-block"
+                <td><i class="material-icons w3-xlarge" style="padding-top: 8px;padding-left: 10px;color: steelblue;">person</i><label  th:text="${photo.username}" style="font-weight: bold;padding: 10px 0px 0px 5px;position: relative;top: -5px;right: -5px;"></label></td>
+            </tr>
+            <tr>
+                <td><a th:href="'/photo/'+${photo.id}"><img style="width: 50%;background-color: rgb(247, 247, 247) ;display: inline-block;margin: 0px;"
                                                             th:src="${photo.url}"></a></td>
-                <td><label th:text="${photo.description}"></label></td>
-                <td><label th:text="${photo.date}"></label></td>
-                <td><label  th:text="${photo.username}"></label></td>
-                <td><label th:text="${photo.hashtags}"></label></td>
+            </tr>
+            <tr>
+                <td><label th:text="${photo.description}" style="padding: 10px 0px 0px 10px;"> </label> <label th:text="${photo.hashtags}" style="color: rgb(20, 85, 204);"></label></td>
+            </tr>
+            <tr>
+                <td><label th:text="${photo.date}" style="padding-left: 10px;"></label></td>
             </tr>
         </table>
     </th:block>
 
-    <div class="pagination-div">
+    <div class="pagination-div" style="text-align: center;padding: 10px 0px 10px 0px; border: 1px solid #e6e6e6;background-color: #fff">
     <span th:if="${page.hasPrevious()}">
         <a th:href="@{/employees(page=${page.number-1},size=${page.size})}">Previous</a>
     </span>

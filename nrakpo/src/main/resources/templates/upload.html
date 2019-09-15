@@ -7,6 +7,7 @@
     <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
 <div class="container-fluid">
     <h1>Picture Upload</h1>
+    <div class="center-page">
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
     <form method="POST" th:object="${photo}">
         <div class="form-row">
@@ -14,6 +15,8 @@
                 <label>Description: </label>
                 <input type="text" th:field="*{description}" class="form-control"/>
             </div>
+        </div>
+        <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label>Image URL: </label>
                 <input type="text" th:field="*{url}" class="form-control"/>
@@ -21,15 +24,15 @@
         </div>
         <div class="form-row">
             <div class="col-md-4 mb-3">
-                <label>Size: </label>
+                <label>Size X: </label>
                 <input type="text" th:field="*{sizeX}" class="form-control" />
-                <label>X</label>
+                <label>Size Y: </label>
                 <input type="text" th:field="*{sizeY}" class="form-control" />
             </div>
         </div>
         <div class="col-md-4 mb-3">
             <label>Format: </label>
-            <select th:field="*{format}" class="form-control" >
+            <select th:field="*{format}" class="form-control" style="width: 270px;">
                 <option th:each="format : ${formats}"
                         th:value="${format}"
                         th:text="${format}"></option>
@@ -48,6 +51,7 @@
             </div>
         </div>
     </form>
+</div>
 </div>
 
 </body>

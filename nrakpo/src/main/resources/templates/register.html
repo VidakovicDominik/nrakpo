@@ -4,7 +4,8 @@
 <body>
 <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
 <div class="container-fluid">
-    <h1 text="Registration"></h1>
+    <h1 text="Registration">Registration</h1>
+    <div class="center-page">
     <div th:if="${param.error}" class="validation-error" text="Unable to register."></div>
     <form method="POST" th:action="@{/register}" th:object="${user}">
         <div class="form-row">
@@ -27,16 +28,16 @@
         </div>
 
         <div class="col-md-4 mb-3">
-            <label>User package: </label>
-            <select th:field="*{userPackage}" class="form-control" >
+            <label style="width: 100px;">User package: </label>
+            <select th:field="*{userPackage}" class="form-control" style="width: 270px;">
                 <option th:each="package : ${userPackages}"
                         th:value="${package}"
                         th:text="${package}"></option>
             </select>
         </div>
         <div class="col-md-4 mb-3">
-            <label>Account type: </label>
-            <select th:field="*{accountType}" class="form-control" >
+            <label style="width: 100px;">Account type: </label>
+            <select th:field="*{accountType}" class="form-control" style="width: 270px;">
                 <option th:each="type : ${accountTypes}"
                         th:value="${type}"
                         th:text="${type}"></option>
@@ -48,6 +49,7 @@
             </div>
         </div>
     </form>
+</div>
 </div>
 </body>
 </html>

@@ -10,40 +10,29 @@
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
     <form method="POST" th:object="${updateduser}" th:action="@{/users/update}">
-        <table>
-            <tr>
-                <td>
+
                     <label th:value="${user.username}"></label>
-                </td>
-                <td>
+
                     <input type="hidden" th:value="${user.username}" name="username" id="username">
 
-                    <label>Psckage:</label>
-                    <select id="userPackage" name="userPackage" class="form-control">
+                    <label>Package:</label>
+                    <select id="userPackage" name="userPackage" class="form-control" style="width:40%;margin-left: 30%">
                         <option th:each="package : ${userPackages}"
                                 th:value="${package}"
                                 th:text="${package}"
                         ></option>
                     </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
+
                     <label>User type:</label>
-                    <select id="userType" name="userType" class="form-control">
+                    <select id="userType" name="userType" class="form-control" style="width:40%;margin-left: 30%;margin-bottom: 20px;">
                         <option th:each="userType : ${userTypes}"
                                 th:value="${userType}"
                                 th:text="${userType}"
                         ></option>
                     </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Update">
-                </td>
-            </tr>
-        </table>
+
+                    <input type="submit" value="Update" class="gumbic">
+
     </form>
 </div>
 

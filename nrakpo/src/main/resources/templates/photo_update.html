@@ -4,47 +4,34 @@
 <head th:replace="fragments :: head"></head>
 
 <body>
-        <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
-<div class="container-fluid">
-    <h1 th:text="Home"></h1>
+        <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6;"></div>
+<div class="container-fluid1" style="height: 550px;width: 600px;">
+    <h1 th:text="Home" style="margin-bottom: 30px;"></h1>
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
     <form method="POST" th:object="${updatedphoto}" th:action="@{/photo/update}">
-        <table>
-            <tr>
-                <td>
-                    <input type="hidden" th:value="${photo.id}" name="id">
-                    <img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}">
-                    <input type="text" th:value="${photo.url}" name="url">
-                </td>
-            </tr>
-            <tr>
-                <td><label>Description</label></td>
-                <td><input type="text" th:value="${photo.description}" name="description"></td>
-            </tr>
-            <tr>
-                <td><label>Hashtags</label></td>
-                <td><input type="text" th:value="${photo.hashtags}" name="hashtags"></td>
-            </tr>
-            <tr>
-                <td><label>Size</label></td>
-                <td><input type="text" th:value="${photo.sizeX}" name="sizeX"><label>X</label><input type="text" th:value="${photo.sizeY}" name="sizeY"></td>
-            </tr>
-            <tr>
+        <div class="p-update1" style="float: left;margin-left: 30px; text-align: center;">
+                <label>Description: </label><br><input type="text" th:value="${photo.description}" name="description"><br>
+                <label>Hashtags: </label><br><input type="text" th:value="${photo.hashtags}" name="hashtags"><br>
+                <label>Size X: </label><br><input type="text" th:value="${photo.sizeX}" name="sizeX"><br><label>Size Y:</label><br><input type="text" th:value="${photo.sizeY}" name="sizeY"><br>
                 <div class="col-md-4 mb-3">
-                    <label>Format: </label>
-                    <select id="format" name="format" class="form-control" >
+                    <label style="padding-left: 50px;">Format: </label>
+                    <select id="format" name="format" class="form-control" style="width: 150px;">
                         <option th:each="format : ${formats}"
                                 th:value="${format}"
-                                th:text="${format}"
-                        ></option>
-                    </select>
+                                th:text="${format}">
+                        </option>
+                    </select><br>
                 </div>
-            </tr>
-            <tr>
-                <td><input type="submit" value="Update"></td>
-            </tr>
-        </table>
+                <input type="submit" value="Update" class="gumbic">
+        </div>
+        <div class="p-update2">
+                <img style="padding-left: 20px;padding-top: 60px; width: 300px; display: inline-block;margin-top: 10opx" th:src="${photo.url}"><br>
+                <input type="hidden" th:value="${photo.id}" name="id">
+                <label>Url: </label>
+                <input type="text" th:value="${photo.url}" name="url" style="margin-top: 20px;">
+        </div>
+        
     </form>
 </div>
 

@@ -66,11 +66,19 @@ body{
 }
 
 .container-fluid1 {
-    width: 1000px;
+    width: 38%;
+    max-width: 800px;
     background-color: #fff;
-    margin-top: 50px;
     border: 1px solid #e6e6e6;
     border-radius: 10px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.container-fluid2 {
+    width: 38%;
+    max-width: 800px;
+    margin-top: 70px;
     text-align: center;
     margin: 0 auto;
 }
@@ -138,6 +146,24 @@ body{
     cursor: pointer;
 }
 
+.gumbic {
+    clear: both;
+    border: 1px solid #dc3545;
+    border-radius: 5px;
+    color: #fff;
+    padding: 5px 15px 5px 15px;
+    background-color: #dc3545;
+    transition: 0.2s ease-in-out;
+}
+
+.gumbic:hover{
+    clear: both;
+    border: 1px solid #dc3545;
+    border-radius: 5px;
+    color: #dc3545;
+    padding: 5px 15px 5px 15px;
+    background-color: #fff;
+}
 
 /*za mobile view*/
 @media screen and (max-width: 1350px) {

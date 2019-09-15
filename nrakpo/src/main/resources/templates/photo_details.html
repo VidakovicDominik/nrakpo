@@ -2,34 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head th:replace="fragments :: head"></head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <body>
 <div th:replace="fragments :: header"></div>
-<table>
+<div class="container-fluid2" style="margin-bottom: 100px;border-bottom: 1px solid #e6e6e6;">
+<table style="border: 1px solid #e6e6e6;margin-top: 20px; background-color: #fff;text-align: left;">
     <tr>
-        <td><img style="padding-left: 20px; width: 250px; display: inline-block" th:src="${photo.url}"></td>
-        <td><label th:text="${photo.description}"></label></td>
-        <td><label th:text="${photo.date}"></label></td>
-        <td><label  th:text="${photo.username}"></label></td>
-        <td><label th:text="${photo.hashtags}"></label></td>
-        <td><label  th:text="${photo.sizeX}"></label><label>X</label><label th:text="${photo.sizeY}"></label></td>
-        <td><label  th:text="${photo.format}"></label></td>
+        <td><i class="material-icons w3-xlarge" style="float: left;padding-top: 8px;padding-left: 10px;color: steelblue;">person</i><label  th:text="${photo.username}" style="padding: 10px 0px 0px 10px;font-weight: bold"></label></td>
     </tr>
     <tr>
-        <div sec:authorize="isAuthenticated()">
+        <td><img style="width: 100%;height:auto;background-color: rgb(247, 247, 247) ;display: inline-block;margin: 0px;" th:src="${photo.url}"></td>
+    </tr>
+    <tr>
+        <td><label th:text="${photo.description}" style="padding: 10px 0px 0px 10px;"></label> <label th:text="${photo.hashtags}" style="color:  rgb(20, 85, 204);"></label></td>
+    </tr>
+    <tr>
+        <td><label  th:text="${photo.sizeX}" style="padding-left: 10px;"></label><label>X</label><label th:text="${photo.sizeY}"></label> <label  th:text="${photo.format}"></label></td>
+    </tr>
+    <tr>
+        <td><label th:text="${photo.date}" style="padding: 0px 0px 0px 10px;"></label></td>
+    </tr>
+    <tr>
+        <div sec:authorize="isAuthenticated()" style="border: 1px solid #e6e6e6;background-color: #fff;">
             <form  method="GET" th:action="@{'/photo/update/'+${photo.id}}">
-                <input type="submit" class="btn btn-danger" th:value="Update"/>
+                <input type="submit" class="btn btn-danger" th:value="Update" style="margin-top: 20px;"/><br><br>
             </form>
             <form  method="POST" th:action="@{'/photo/download/'+${photo.id}}">
                 <th:block th:each="filter : ${filters}">
                     <input type="checkbox" name="pickedFilters" th:value="${filter}"/>
                     <label th:text="${filter}"></label>
                 </th:block>
-                <input type="submit" class="btn btn-danger" th:value="Download"/>
+                <br>
+                <input type="submit" class="btn btn-danger" th:value="Download" style="margin-bottom: 20px;"/>
             </form>
         </div>
     </tr>
 </table>
-
+</div>
 </body>
 </html>
