@@ -3,6 +3,7 @@ package com.vidakovic.nrakpo.controller;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +52,8 @@ public class InputController {
     }
 
     @GetMapping
-    public String pictureUpload(Model model){
+    public String pictureUpload(Model model, Authentication authentication){
+        Logger.getInstance().log(authentication.getName(),"Accessing photo upload page");
         model.addAttribute("photo",new PhotoApiModel());
         model.addAttribute("formats", ImageFormat.values());
         return "upload";
@@ -59,6 +61,7 @@ public class InputController {
 
     @PostMapping
     public String pictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication){
+        Logger.getInstance().log(authentication.getName(),"Uploading photo with description: "+photo.getDescription());
         photoService.insertPhoto(photo,authentication.getName());
         return "redirect:/home";
     }

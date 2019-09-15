@@ -5,6 +5,7 @@ import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -37,6 +38,7 @@ public class RegistrationController {
 
     @PostMapping
     public String processRegistration(@ModelAttribute RegistrationForm form) {
+        Logger.getInstance().log(form.getUsername(),"Just registered");
         User user=form.toUser(passwordEncoder);
         userRepository.saveUserWithAuthorities(user);
         return "redirect:/login";

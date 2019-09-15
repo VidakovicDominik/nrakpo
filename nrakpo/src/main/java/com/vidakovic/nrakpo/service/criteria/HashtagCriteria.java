@@ -18,6 +18,7 @@ public class HashtagCriteria implements Criteria {
 
     @Override
     public List<Photo> criteriaCheck(List<Photo> photos) {
+        trimHashtags();
         List<Photo> photosWithContainingHashtags=new ArrayList<>();
         for (Photo photo :
                 photos) {
@@ -25,10 +26,19 @@ public class HashtagCriteria implements Criteria {
                  photo.getHashtags()) {
                 if(hashtags.contains(hashtag.getName())){
                     photosWithContainingHashtags.add(photo);
-                    break;
+                    continue;
                 }
             }
         }
         return photosWithContainingHashtags;
+    }
+
+    private void trimHashtags(){
+        List<String> trimmedHashtags=new ArrayList<>();
+        for (String hashtag :
+                hashtags) {
+            trimmedHashtags.add(hashtag.trim());
+        }
+        hashtags=trimmedHashtags;
     }
 }

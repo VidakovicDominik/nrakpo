@@ -6,8 +6,9 @@ import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.UserService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,15 @@ public class UserController {
     UserService userService;
 
     @GetMapping()
-    public String showIndex(Model model) {
+    public String showIndex(Model model , Authentication authentication) {
+        Logger.getInstance().log(authentication.getName(),"Accessing user list");
         model.addAttribute("users",toApiModel(userRepository.findAll()));
         return "users";
     }
 
     @GetMapping("/update/{id}")
-    public String showUpdatePhoto(Model model, @PathVariable String id) {
+    public String showUpdateUser(Model model, @PathVariable String id , Authentication authentication) {
+        Logger.getInstance().log(authentication.getName(),"Accessing user update page");
         Optional<User> user = userRepository.findById(id);
         model.addAttribute("user", user.get());
         model.addAttribute("userPackages", UserPackage.values());
@@ -43,7 +46,8 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updatePhoto(@Valid @ModelAttribute UserApiModel user, Authentication authentication) {
+    public String updateUser(@Valid @ModelAttribute UserApiModel user, Authentication authentication) {
+        Logger.getInstance().log(authentication.getName(),"Updated user: "+user.getUsername());
         userService.updateUser(user);
         return "redirect:/home";
     }
