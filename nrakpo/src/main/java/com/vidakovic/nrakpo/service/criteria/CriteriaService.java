@@ -1,6 +1,6 @@
 package com.vidakovic.nrakpo.service.criteria;
 
-import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
+import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import org.springframework.stereotype.Service;

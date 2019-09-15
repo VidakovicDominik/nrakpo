@@ -4,6 +4,10 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("GOLD")
-public class GoldUser extends User {
+@DiscriminatorValue("GOOGLE")
+public class GoogleUser extends User {
+
+    public GoogleUser() {
+        super();
+    }
 }

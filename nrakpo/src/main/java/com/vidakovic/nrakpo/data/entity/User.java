@@ -4,15 +4,12 @@ import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "USERS")
-//@DiscriminatorColumn(name = )
+@DiscriminatorColumn(name = "account_type")
 public class User {
 
     @Id
@@ -28,7 +25,8 @@ public class User {
 
     private UserPackage userPackage;
 
-    private AccountType accountType;
+    @Column(name = "account_type", updatable = false, insertable = false)
+    private String accountType;
 
     public User() {
         this.username = null;
@@ -36,13 +34,12 @@ public class User {
         this.enabled = true;
     }
 
-    public User(String username, String password, String email, UserType userType, UserPackage userPackage, AccountType accountType) {
+    public User(String username, String password, String email, UserType userType, UserPackage userPackage) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.userType = userType;
         this.userPackage = userPackage;
-        this.accountType = accountType;
         this.enabled = true;
     }
 
@@ -85,11 +82,11 @@ public class User {
         return enabled;
     }
 
-    public AccountType getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(AccountType accountType) {
+    public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
 

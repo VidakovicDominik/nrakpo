@@ -1,6 +1,6 @@
 package com.vidakovic.nrakpo.service;
 
-import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
+import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
@@ -10,6 +10,8 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.builder.PhotoBuilder;
+import com.vidakovic.nrakpo.service.builder.PhotoMockDirector;
 import com.vidakovic.nrakpo.service.cor.FilterService;
 import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
@@ -111,6 +113,18 @@ public class PhotoServiceImpl implements PhotoService {
     public FilteredPhoto downloadPhoto(Integer id, List<String> filters) {
         FilteredPhoto filteredPhoto=new FilteredPhoto(photoRepository.findById(id).get());
         return filterService.getFilteredPhoto(filteredPhoto,filters);
+    }
+
+    public void mock(){
+        PhotoBuilder builder=new PhotoBuilder();
+        for(int i=0;i<9;i++) {
+            PhotoMockDirector director = new PhotoMockDirector(builder);
+            director.buildPhoto();
+            Photo photo = builder.getProduct();
+            photoRepository.save(photo);
+            hashtagRepository.saveAll(photo.getHashtags());
+            builder.reset();
+        }
     }
 }
 

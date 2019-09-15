@@ -1,6 +1,5 @@
 package com.vidakovic.nrakpo.service.criteria;
 
-import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.Photo;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.vidakovic.nrakpo.controller.apimodel;
+package com.vidakovic.nrakpo.controller.form;
 
 public class CriteriaForm {
 

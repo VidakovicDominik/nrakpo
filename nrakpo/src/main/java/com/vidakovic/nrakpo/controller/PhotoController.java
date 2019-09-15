@@ -1,7 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
-import com.vidakovic.nrakpo.controller.apimodel.CriteriaForm;
-import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
+import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;

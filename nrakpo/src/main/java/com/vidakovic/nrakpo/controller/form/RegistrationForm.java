@@ -26,13 +26,6 @@ public class RegistrationForm {
 
     private AccountType accountType;
 
-
-    public User toUser(PasswordEncoder passwordEncoder){
-        if(username.equals("admin"))
-            userType=UserType.ADMINISTRATOR;
-
-        return new User(username, passwordEncoder.encode(password), email, userType, userPackage, accountType);
-    }
     
     public RegistrationForm() {
     }

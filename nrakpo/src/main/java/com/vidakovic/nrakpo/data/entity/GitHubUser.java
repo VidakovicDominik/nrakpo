@@ -4,6 +4,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("FREE")
-public class FreeUser extends User {
+@DiscriminatorValue("GITHUB")
+public class GitHubUser extends User {
+    public GitHubUser() {
+        super();
+    }
 }

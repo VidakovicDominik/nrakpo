@@ -4,6 +4,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("PRO")
-public class ProUser extends User {
+@DiscriminatorValue("LOCAL")
+public class LocalUser extends User {
+    public LocalUser() {
+        super();
+    }
 }

@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mock").permitAll()
                 .antMatchers("/users").hasRole("ADMIN")
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/home").permitAll()
                 .antMatchers("/photo/**").authenticated()
                 .anyRequest().authenticated()
                 // ignore CSRF protection and allow IFRAME for h2 console

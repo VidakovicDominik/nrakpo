@@ -5,6 +5,7 @@ import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.UserService;
 import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,13 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private UserService userService;
 
-    @Autowired
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -39,8 +37,7 @@ public class RegistrationController {
     @PostMapping
     public String processRegistration(@ModelAttribute RegistrationForm form) {
         Logger.getInstance().log(form.getUsername(),"Just registered");
-        User user=form.toUser(passwordEncoder);
-        userRepository.saveUserWithAuthorities(user);
+        userService.insertUser(form);
         return "redirect:/login";
     }
 }
