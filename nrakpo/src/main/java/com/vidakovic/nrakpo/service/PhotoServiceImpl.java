@@ -12,6 +12,7 @@ import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.cor.FilterService;
 import com.vidakovic.nrakpo.service.criteria.CriteriaService;
+import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,18 +30,18 @@ public class PhotoServiceImpl implements PhotoService {
 
     PhotoRepository photoRepository;
     UserRepository userRepository;
-    ConsumptionEvaluator consumptionEvaluator;
     HashtagRepository hashtagRepository;
     CriteriaService criteriaService;
     FilterService filterService;
+    PackageUsageService packageUsageService;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, ConsumptionEvaluator consumptionEvaluator, HashtagRepository hashtagRepository, CriteriaService criteriaService, FilterService filterService) {
+    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, HashtagRepository hashtagRepository, CriteriaService criteriaService, FilterService filterService, PackageUsageService packageUsageService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
-        this.consumptionEvaluator = consumptionEvaluator;
         this.hashtagRepository = hashtagRepository;
         this.criteriaService = criteriaService;
         this.filterService = filterService;
+        this.packageUsageService = packageUsageService;
     }
 
     @Override
@@ -50,9 +51,8 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public void insertPhoto(PhotoApiModel photo, String username) {
-
         User user = userRepository.findById(username).get();
-        if (!consumptionEvaluator.evaluate(user, getMonthlyConsumption(user))) {
+        if (packageUsageService.exeededLimit(user, getMonthlyConsumption(user))) {
             throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "You can't upload any more pictures this month");
         }
         photoRepository.save(
