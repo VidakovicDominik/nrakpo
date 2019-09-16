@@ -3,6 +3,7 @@ package com.vidakovic.nrakpo.controller;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.decorator.PhotoServiceDecorator;
 import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class InputController {
 
     PhotoService photoService;
 
-    public InputController(PhotoService photoService){
+    public InputController(PhotoServiceDecorator photoService){
         this.photoService=photoService;
     }
 

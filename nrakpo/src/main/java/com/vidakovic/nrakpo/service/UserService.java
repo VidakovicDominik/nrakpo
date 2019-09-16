@@ -33,6 +33,9 @@ public class UserService {
         if(registrationForm.getUsername().equals("admin")){
             user.setUserType(UserType.ADMINISTRATOR);
         }
+        else{
+            user.setUserType(UserType.USER);
+        }
         user.setUsername(registrationForm.getUsername());
         user.setUserPackage(registrationForm.getUserPackage());
         user.setEmail(registrationForm.getEmail());

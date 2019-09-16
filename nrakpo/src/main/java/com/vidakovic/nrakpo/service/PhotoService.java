@@ -40,7 +40,8 @@ public interface PhotoService {
     void insertPhoto(PhotoApiModel photo, String username);
     Page<PhotoApiModel> getAllPhotos(Pageable pageable);
     void updatePhoto(PhotoApiModel photo, String username);
-    Long getMonthlyConsumption(User user);
+    boolean checkMonthlyConsumption(User user);
     List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm);
     FilteredPhoto downloadPhoto(Integer id, List<String> filters);
+    void mock();
 }

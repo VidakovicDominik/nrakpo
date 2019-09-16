@@ -1,9 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
-import com.vidakovic.nrakpo.data.entity.Hashtag;
-import com.vidakovic.nrakpo.data.entity.Photo;
-import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
@@ -15,13 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -36,7 +29,7 @@ public class HomeController {
     @Autowired
     HashtagRepository hashtagRepository;
 
-    PhotoServiceImpl photoService;
+    PhotoService photoService;
 
     public HomeController(PhotoServiceImpl photoService) {
         this.photoService = photoService;

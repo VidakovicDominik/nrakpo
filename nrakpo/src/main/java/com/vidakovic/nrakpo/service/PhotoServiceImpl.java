@@ -54,7 +54,7 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public void insertPhoto(PhotoApiModel photo, String username) {
         User user = userRepository.findById(username).get();
-        if (packageUsageService.exeededLimit(user, getMonthlyConsumption(user))) {
+        if (checkMonthlyConsumption(user)) {
             throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "You can't upload any more pictures this month");
         }
         photoRepository.save(
@@ -100,8 +100,8 @@ public class PhotoServiceImpl implements PhotoService {
 
 
     @Override
-    public Long getMonthlyConsumption(User user) {
-        return photoRepository.countByUserAndDateBetween(user, new Date().getTime() - 2629743L, new Date().getTime());
+    public boolean checkMonthlyConsumption(User user) {
+        return packageUsageService.exeededLimit(user, photoRepository.countByUserAndDateBetween(user, new Date().getTime() - 2629743L, new Date().getTime())) ;
     }
 
     @Override
