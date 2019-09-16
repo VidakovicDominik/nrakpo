@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -61,9 +63,12 @@ public class PhotoController {
     }
 
     @GetMapping("/update/{id}")
-    public String showUpdatePhoto(Model model, @PathVariable Integer id , Authentication authentication) {
+    public String showUpdatePhoto(Model model, @PathVariable Integer id , Authentication authentication, HttpServletRequest request) {
         Logger.getInstance().log(authentication.getName(),"Accessing photo update page of photo with id: "+id);
         PhotoApiModel photo = photoService.getPhoto(id);
+        if(!photo.getUsername().equals(authentication.getName())||!request.isUserInRole("ADMIN")){
+            return "redirect:/home";
+        }
         model.addAttribute("photo", photo);
         model.addAttribute("selectedFormat", photo.getFormat());
         model.addAttribute("formats", ImageFormat.values());
@@ -93,7 +98,7 @@ public class PhotoController {
     @PostMapping("/download/{id}")
     public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),"Downloaded photo with id: "+id);
-        model.addAttribute("photo",photoService.downloadPhoto(id, Arrays.asList(filters)));
+        model.addAttribute("photo",photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));
         return "photo_download";
     }
 

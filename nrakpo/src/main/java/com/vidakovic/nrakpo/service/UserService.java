@@ -24,7 +24,6 @@ public class UserService {
     public void updateUser(UserApiModel userApiModel){
         User user=userRepository.findById(userApiModel.getUsername()).get();
         user.setUserPackage(UserPackage.valueOf(userApiModel.getUserPackage()));
-        user.setUserType(UserType.valueOf(userApiModel.getUserType()));
         userRepository.save(user);
     }
 

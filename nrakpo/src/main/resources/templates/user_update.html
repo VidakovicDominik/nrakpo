@@ -6,7 +6,7 @@
 <body>
     <div th:replace="fragments :: header" style="border: 1px solid #e6e6e6"></div>
 <div class="container-fluid">
-    <h1 th:text="Home"></h1>
+    <h1>Update user</h1>
     <div th:if="${param.error}" class="login-error" th:text="Unable to login"></div>
     <div th:if="${param.logout}" class="logout-success" th:text="Logged out!"></div>
     <form method="POST" th:object="${updateduser}" th:action="@{/users/update}">
@@ -20,14 +20,6 @@
                         <option th:each="package : ${userPackages}"
                                 th:value="${package}"
                                 th:text="${package}"
-                        ></option>
-                    </select>
-
-                    <label>User type:</label>
-                    <select id="userType" name="userType" class="form-control" style="width:40%;margin-left: 30%;margin-bottom: 20px;">
-                        <option th:each="userType : ${userTypes}"
-                                th:value="${userType}"
-                                th:text="${userType}"
                         ></option>
                     </select>
 
