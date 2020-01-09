@@ -6,17 +6,17 @@ import java.util.List;
 
 public class OrCriteria implements Criteria {
 
-    private Criteria Criteria;
+    private Criteria criteria;
     private Criteria otherCriteria;
 
     public OrCriteria(Criteria Criteria, Criteria otherCriteria) {
-        this.Criteria = Criteria;
+        this.criteria = Criteria;
         this.otherCriteria = otherCriteria;
     }
 
     @Override
     public List<Photo> criteriaCheck(List<Photo> Photos) {
-        List<Photo> firstFilterItems = Criteria.criteriaCheck(Photos);
+        List<Photo> firstFilterItems = criteria.criteriaCheck(Photos);
         List<Photo> otherFilterItems = otherCriteria.criteriaCheck(Photos);
 
         for (Photo Photo : otherFilterItems) {

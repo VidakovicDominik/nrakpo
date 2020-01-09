@@ -1,8 +1,8 @@
 package com.vidakovic.nrakpo.service;
 
-import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.entity.User;
@@ -22,7 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +40,12 @@ public class PhotoServiceImpl implements PhotoService {
     FilterService filterService;
     PackageUsageService packageUsageService;
 
-    public PhotoServiceImpl(PhotoRepository photoRepository, UserRepository userRepository, HashtagRepository hashtagRepository, CriteriaService criteriaService, FilterService filterService, PackageUsageService packageUsageService) {
+    public PhotoServiceImpl(PhotoRepository photoRepository,
+                            UserRepository userRepository,
+                            HashtagRepository hashtagRepository,
+                            CriteriaService criteriaService,
+                            FilterService filterService,
+                            PackageUsageService packageUsageService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.hashtagRepository = hashtagRepository;
@@ -61,7 +69,7 @@ public class PhotoServiceImpl implements PhotoService {
                 new Photo(
                         photo.getDescription(),
                         photo.getUrl(),
-                        photo.getSizeX()+"X"+photo.getSizeY(),
+                        photo.getSizeX() + "X" + photo.getSizeY(),
                         ImageFormat.valueOf(photo.getFormat()),
                         parseHashtags(photo.getHashtags()),
                         user));
@@ -93,31 +101,67 @@ public class PhotoServiceImpl implements PhotoService {
         oldPhoto.setDescription(photo.getDescription());
         oldPhoto.setFormat(ImageFormat.valueOf(photo.getFormat()));
         oldPhoto.setUrl(photo.getUrl());
-        oldPhoto.setSize(photo.getSizeX()+"X"+photo.getSizeY());
+        oldPhoto.setSize(photo.getSizeX() + "X" + photo.getSizeY());
         oldPhoto.setHashtags(parseHashtags(photo.getHashtags()));
         photoRepository.save(oldPhoto);
     }
 
-
     @Override
     public boolean checkMonthlyConsumption(User user) {
-        return packageUsageService.exeededLimit(user, photoRepository.countByUserAndDateBetween(user, new Date().getTime() - 2629743L, new Date().getTime())) ;
+        return packageUsageService.exeededLimit(user, photoRepository.countByUserAndDateBetween(user, new Date().getTime() - 2629743L, new Date().getTime()));
     }
 
     @Override
-    public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm){
-        return criteriaService.getPhotosByCriteria(criteriaForm).stream().map(x->new PhotoApiModel(x)).collect(Collectors.toList());
+    public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm) {
+        List<Photo> photos = (List<Photo>) photoRepository.findAll();
+        return photos.stream()
+                .peek(x -> System.out.println(x.getDescription() + "pure"))
+                .filter(x -> x.getUser().getUsername().equals(criteriaForm.getAuthor()))
+                .peek(x -> System.out.println(x.getDescription() + "username"))
+                .filter(x -> x.getDate() > getLongDate(criteriaForm.getDateFrom()) && x.getDate() < getLongDate(criteriaForm.getDateTo()))
+                .peek(x -> System.out.println(x.getDescription() + "date"))
+                .filter(x ->
+                        Integer.parseInt(x.getSize().split("X")[0]) == Integer.parseInt(criteriaForm.getSizeX())
+                                &&
+                                Integer.parseInt(x.getSize().split("X")[1]) == Integer.parseInt(criteriaForm.getSizeY())
+                )
+                .peek(x -> System.out.println(x.getDescription() + "size"))
+                .filter(x -> {
+                    for (String hashtag :
+                            Arrays.asList(criteriaForm.getHashtags().trim().split("#"))) {
+                        for (Hashtag storedHashtag :
+                                x.getHashtags()) {
+                            if (hashtag.equals(storedHashtag.getName()))
+                                return true;
+                        }
+                    }
+                    return false;
+                })
+                .peek(x -> System.out.println(x.getDescription() + "hashtags"))
+                .map(x -> new PhotoApiModel(x))
+                .collect(Collectors.toList());
+
+//        return criteriaService.getPhotosByCriteria(criteriaForm).stream().map(x -> new PhotoApiModel(x)).collect(Collectors.toList());
+    }
+
+    private long getLongDate(String date) {
+        try {
+            return new SimpleDateFormat("dd/MM/yyyy").parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public FilteredPhoto downloadPhoto(Integer id, List<String> filters) {
-        FilteredPhoto filteredPhoto=new FilteredPhoto(photoRepository.findById(id).get());
-        return filterService.getFilteredPhoto(filteredPhoto,filters);
+        FilteredPhoto filteredPhoto = new FilteredPhoto(photoRepository.findById(id).get());
+        return filterService.getFilteredPhoto(filteredPhoto, filters);
     }
 
-    public void mock(){
-        PhotoBuilder builder=new PhotoBuilder();
-        for(int i=0;i<9;i++) {
+    public void mock() {
+        PhotoBuilder builder = new PhotoBuilder();
+        for (int i = 0; i < 9; i++) {
             PhotoMockDirector director = new PhotoMockDirector(builder);
             director.buildPhoto();
             Photo photo = builder.getProduct();
