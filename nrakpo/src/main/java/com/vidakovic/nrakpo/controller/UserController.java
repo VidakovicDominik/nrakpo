@@ -7,6 +7,7 @@ import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.UserService;
 import com.vidakovic.nrakpo.service.singleton.Logger;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
+@Timed
 public class UserController {
 
     @Autowired

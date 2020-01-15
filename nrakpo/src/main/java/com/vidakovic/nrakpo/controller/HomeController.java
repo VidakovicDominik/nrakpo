@@ -7,6 +7,9 @@ import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import com.vidakovic.nrakpo.service.singleton.Logger;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
+@Timed
 public class HomeController {
 
     @Autowired
@@ -31,8 +35,14 @@ public class HomeController {
 
     PhotoService photoService;
 
-    public HomeController(PhotoServiceImpl photoService) {
+    PrometheusMeterRegistry prometheusMeterRegistry;
+
+    Counter testCounter;
+
+    public HomeController(PhotoServiceImpl photoService, PrometheusMeterRegistry prometheusMeterRegistry) {
+        this.prometheusMeterRegistry=prometheusMeterRegistry;
         this.photoService = photoService;
+        testCounter=prometheusMeterRegistry.counter("test_counter");
     }
 
     @GetMapping
@@ -54,6 +64,7 @@ public class HomeController {
 
     @GetMapping("/mock")
     public String mock(Model model) {
+        testCounter.increment();
         photoService.mock();
         return "redirect:/home";
     }

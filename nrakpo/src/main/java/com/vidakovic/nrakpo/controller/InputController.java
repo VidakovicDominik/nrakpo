@@ -5,6 +5,7 @@ import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.decorator.PhotoServiceDecorator;
 import com.vidakovic.nrakpo.service.singleton.Logger;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +45,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/pictureUpload")
+@Timed
 public class InputController {
 
     PhotoService photoService;
