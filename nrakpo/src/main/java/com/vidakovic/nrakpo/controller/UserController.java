@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.UserApiModel;
 import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
@@ -31,6 +32,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping()
+    @MeasureTime(metricName = "get_users_timer")
     public String showIndex(Model model , Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Accessing user list");
         model.addAttribute("users",toApiModel(userRepository.findAll()));
@@ -48,6 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
+    @MeasureTime(metricName = "update_user_timer")
     public String updateUser(@Valid @ModelAttribute UserApiModel user, Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Updated user: "+user.getUsername());
         userService.updateUser(user);

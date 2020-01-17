@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.form.RegistrationForm;
 import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
@@ -33,6 +34,7 @@ public class RegistrationController {
     }
 
     @PostMapping
+    @MeasureTime(metricName = "registration_timer")
     public String processRegistration(@ModelAttribute RegistrationForm form) {
         Logger.getInstance().log(form.getUsername(),"Just registered");
         userService.insertUser(form);

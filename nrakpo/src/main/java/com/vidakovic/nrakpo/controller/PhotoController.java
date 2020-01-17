@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
@@ -28,6 +29,7 @@ public class PhotoController {
     }
 
     @GetMapping("/{id}")
+    @MeasureTime(metricName = "photo_details_timer")
     public String showPhotoDetails(Model model, @PathVariable Integer id , Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Accessing photo details of photo with id: "+id);
         model.addAttribute("photo", photoService.getPhoto(id));
@@ -49,6 +51,7 @@ public class PhotoController {
     }
 
     @PostMapping("/filter")
+    @MeasureTime(metricName = "filter_photos_timer")
     public String applyCriteriaToPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),
                 "Accessing filter page with the following criteria:" +
@@ -62,6 +65,7 @@ public class PhotoController {
     }
 
     @PostMapping("/update")
+    @MeasureTime(metricName = "update_photo_timer")
     public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Updated photo with id: "+ photo.getId());
         photoService.updatePhoto(photo,authentication.getName());
@@ -69,6 +73,7 @@ public class PhotoController {
     }
 
     @PostMapping("/download/{id}")
+    @MeasureTime(metricName = "download_timer")
     public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),"Downloaded photo with id: "+id);
         model.addAttribute("photo",photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));

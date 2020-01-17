@@ -1,8 +1,9 @@
 package com.vidakovic.nrakpo.service;
 
-import com.vidakovic.nrakpo.controller.form.CriteriaForm;
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
+import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.entity.User;
@@ -115,6 +116,7 @@ public class PhotoServiceImpl implements PhotoService {
         return filterService.getFilteredPhoto(filteredPhoto,filters);
     }
 
+    @MeasureTime(metricName = "mock_timer")
     public void mock(){
         PhotoBuilder builder=new PhotoBuilder();
         for(int i=0;i<9;i++) {
