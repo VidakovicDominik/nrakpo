@@ -31,7 +31,7 @@ public class HomeController {
     @Log(message = "Accessing home page")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model, Authentication authentication) {
         if (authentication == null) {
-            Logger.getInstance().log("Anonymous user", "Accessing home page");
+            Logger.getInstance().log("Annonimous user", "Accessing home page");
         } else {
             Logger.getInstance().log(authentication.getName(), "Accessing home page");
         }
