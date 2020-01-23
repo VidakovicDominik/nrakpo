@@ -3,6 +3,7 @@ package com.vidakovic.nrakpo.aspect;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -40,9 +41,10 @@ public class LogAspect {
     private static final Logger LOG = LoggerFactory.getLogger(LogAspect.class);
 
     @Before("@annotation(com.vidakovic.nrakpo.aspect.Log)")
-    public void writeLog(final JoinPoint joinPoint) throws Throwable {
+    public void writeLog(final JoinPoint joinPoint) {
+        String message = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(Log.class).message();
         String methodName = joinPoint.getSignature().getName();
-        LOG.info("Executing method: " + methodName);
+        LOG.info(methodName+" : "+message);
     }
 
 

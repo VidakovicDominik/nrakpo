@@ -1,15 +1,11 @@
 package com.vidakovic.nrakpo.controller;
 
-import com.vidakovic.nrakpo.controller.form.RegistrationForm;
 import com.vidakovic.nrakpo.aspect.Log;
+import com.vidakovic.nrakpo.controller.form.RegistrationForm;
 import com.vidakovic.nrakpo.data.entity.enums.AccountType;
-import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
-import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.UserService;
 import com.vidakovic.nrakpo.service.singleton.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +32,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    @Log(message = "message")
+    @Log(message = "Registering user")
     public String processRegistration(@ModelAttribute RegistrationForm form) {
         Logger.getInstance().log(form.getUsername(),"Just registered");
         userService.insertUser(form);

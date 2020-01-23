@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
@@ -41,6 +42,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
+    @Log(message = "Accessing home page")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model, Authentication authentication) {
         if (authentication == null) {
             Logger.getInstance().log("Annonimous user", "Accessing home page");
@@ -53,6 +55,7 @@ public class HomeController {
     }
 
     @GetMapping("/mock")
+    @Log(message = "Mocking images")
     public String mock(Model model) {
         photoService.mock();
         return "redirect:/home";

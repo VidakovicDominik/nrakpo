@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
@@ -76,6 +77,7 @@ public class PhotoController {
     }
 
     @PostMapping("/filter")
+    @Log(message = "Filtering images")
     public String applyCriteriaToPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),
                 "Accessing filter page with the following criteria:" +
@@ -89,6 +91,7 @@ public class PhotoController {
     }
 
     @PostMapping("/update")
+    @Log(message = "Updating image information")
     public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Updated photo with id: "+ photo.getId());
         photoService.updatePhoto(photo,authentication.getName());
@@ -96,6 +99,7 @@ public class PhotoController {
     }
 
     @PostMapping("/download/{id}")
+    @Log(message = "Downloading image")
     public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),"Downloaded photo with id: "+id);
         model.addAttribute("photo",photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));

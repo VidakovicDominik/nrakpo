@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.apimodel.UserApiModel;
 import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
@@ -46,6 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
+    @Log(message = "Updating user information")
     public String updateUser(@Valid @ModelAttribute UserApiModel user, Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Updated user: "+user.getUsername());
         userService.updateUser(user);

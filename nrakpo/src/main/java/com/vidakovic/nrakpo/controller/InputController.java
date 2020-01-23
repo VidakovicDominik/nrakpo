@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
@@ -61,6 +62,7 @@ public class InputController {
     }
 
     @PostMapping
+    @Log(message = "Uploading picture")
     public String pictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),"Uploading photo with description: "+photo.getDescription());
         photoService.insertPhoto(photo,authentication.getName());
