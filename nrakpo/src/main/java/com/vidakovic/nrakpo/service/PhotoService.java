@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -43,5 +44,6 @@ public interface PhotoService {
     boolean checkMonthlyConsumption(User user);
     List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm);
     FilteredPhoto downloadPhoto(Integer id, List<String> filters);
+    Map<String, Long> stats();
     void mock();
 }
