@@ -24,10 +24,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,33 +112,38 @@ public class PhotoServiceImpl implements PhotoService {
     public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm) {
         List<Photo> photos = (List<Photo>) photoRepository.findAll();
         return photos.stream()
-                .peek(x -> System.out.println(x.getDescription() + "pure"))
                 .filter(x -> x.getUser().getUsername().equals(criteriaForm.getAuthor()))
-                .peek(x -> System.out.println(x.getDescription() + "username"))
                 .filter(x -> x.getDate() > getLongDate(criteriaForm.getDateFrom()) && x.getDate() < getLongDate(criteriaForm.getDateTo()))
-                .peek(x -> System.out.println(x.getDescription() + "date"))
-                .filter(x ->
-                        Integer.parseInt(x.getSize().split("X")[0]) == Integer.parseInt(criteriaForm.getSizeX())
-                                &&
-                                Integer.parseInt(x.getSize().split("X")[1]) == Integer.parseInt(criteriaForm.getSizeY())
-                )
-                .peek(x -> System.out.println(x.getDescription() + "size"))
-                .filter(x -> {
-                    for (String hashtag :
-                            Arrays.asList(criteriaForm.getHashtags().trim().split("#"))) {
-                        for (Hashtag storedHashtag :
-                                x.getHashtags()) {
-                            if (hashtag.equals(storedHashtag.getName()))
-                                return true;
-                        }
-                    }
-                    return false;
-                })
-                .peek(x -> System.out.println(x.getDescription() + "hashtags"))
+                .filter(x -> checkSize(criteriaForm,x.getSize()))
+                .filter(x -> checkHashtags(criteriaForm, x.getHashtags()))
                 .map(x -> new PhotoApiModel(x))
                 .collect(Collectors.toList());
+    }
 
-//        return criteriaService.getPhotosByCriteria(criteriaForm).stream().map(x -> new PhotoApiModel(x)).collect(Collectors.toList());
+    @Override
+    public Map<String, Long> stats(){
+     return  ((List<Hashtag>)hashtagRepository.findAll()).stream().collect(Collectors.groupingBy(Hashtag::getName, Collectors.counting()));
+
+
+    }
+
+    private boolean checkHashtags(CriteriaForm criteriaForm, List<Hashtag> hashtags){
+        for (String hashtag :
+                Arrays.asList(criteriaForm.getHashtags().trim().split("#"))) {
+            for (Hashtag storedHashtag :
+                    hashtags) {
+                if (hashtag.equals(storedHashtag.getName()))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkSize(CriteriaForm criteriaForm, String size){
+        String[] splitSize = size.split("X");
+        return Integer.parseInt(splitSize[0]) == Integer.parseInt(criteriaForm.getSizeX())
+                &&
+                Integer.parseInt(splitSize[1]) == Integer.parseInt(criteriaForm.getSizeY());
     }
 
     private long getLongDate(String date) {
