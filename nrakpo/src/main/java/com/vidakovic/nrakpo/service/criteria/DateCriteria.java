@@ -1,11 +1,9 @@
 package com.vidakovic.nrakpo.service.criteria;
 
 import com.vidakovic.nrakpo.data.entity.Photo;
+import com.vidakovic.nrakpo.util.DateUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -15,19 +13,9 @@ public class DateCriteria implements Criteria {
     private Long dateTo;
 
     public DateCriteria(String dateFrom, String dateTo) {
-        this.dateFrom = parseDate(dateFrom);
-        this.dateTo = parseDate(dateTo);
-    }
-
-    private Long parseDate(String date){
-        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            Date d = f.parse(date);
-            return d.getTime();
-        } catch (ParseException e) {
-
-        }
-        return 0L;
+        DateUtil dateUtil = new DateUtil();
+        this.dateFrom = dateUtil.getLongDate(dateFrom);
+        this.dateTo = dateUtil.getLongDate(dateTo);
     }
 
     @Override

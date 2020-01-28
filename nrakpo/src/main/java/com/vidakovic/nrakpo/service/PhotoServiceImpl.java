@@ -14,6 +14,7 @@ import com.vidakovic.nrakpo.service.builder.PhotoMockDirector;
 import com.vidakovic.nrakpo.service.cor.FilterService;
 import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
+import com.vidakovic.nrakpo.util.DateUtil;
 import com.vidakovic.nrakpo.util.HashtagUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,8 @@ public class PhotoServiceImpl implements PhotoService {
     FilterService filterService;
     PackageUsageService packageUsageService;
     HashtagUtil hashtagUtil;
+    DateUtil dateUtil;
+            
 
     public PhotoServiceImpl(PhotoRepository photoRepository,
                             UserRepository userRepository,
@@ -45,14 +46,16 @@ public class PhotoServiceImpl implements PhotoService {
                             CriteriaService criteriaService,
                             FilterService filterService,
                             PackageUsageService packageUsageService,
-                            HashtagUtil hashtagUtil) {
+                            HashtagUtil hashtagUtil,
+                            DateUtil dateUtil) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.hashtagRepository = hashtagRepository;
         this.criteriaService = criteriaService;
         this.filterService = filterService;
         this.packageUsageService = packageUsageService;
-        this.hashtagUtil=hashtagUtil;
+        this.hashtagUtil = hashtagUtil;
+        this.dateUtil=dateUtil;
     }
 
     @Override
@@ -78,11 +81,7 @@ public class PhotoServiceImpl implements PhotoService {
 
     @Override
     public Page<PhotoApiModel> getAllPhotos(Pageable pageable) {
-        return photoRepository.findAll(pageable).map(this::parsePhoto);
-    }
-
-    private PhotoApiModel parsePhoto(Photo photo) {
-        return new PhotoApiModel(photo);
+        return photoRepository.findAll(pageable).map(PhotoApiModel::new);
     }
 
     @Override
@@ -108,27 +107,18 @@ public class PhotoServiceImpl implements PhotoService {
         List<Photo> photos = (List<Photo>) photoRepository.findAll();
         return photos.stream()
                 .filter(x -> x.getUser().getUsername().equals(criteriaForm.getAuthor()))
-                .filter(x -> x.getDate() > getLongDate(criteriaForm.getDateFrom()) && x.getDate() < getLongDate(criteriaForm.getDateTo()))
-                .filter(x -> checkSize(criteriaForm,x.getSize()))
+                .filter(x -> x.getDate() > dateUtil.getLongDate(criteriaForm.getDateFrom()) && x.getDate() < dateUtil.getLongDate(criteriaForm.getDateTo()))
+                .filter(x -> checkSize(criteriaForm, x.getSize()))
                 .filter(x -> hashtagUtil.hasCommonHashtag(criteriaForm.getHashtags(), x.getHashtags()))
                 .map(x -> new PhotoApiModel(x))
                 .collect(Collectors.toList());
     }
 
-    private boolean checkSize(CriteriaForm criteriaForm, String size){
+    private boolean checkSize(CriteriaForm criteriaForm, String size) {
         String[] splitSize = size.split("X");
         return Integer.parseInt(splitSize[0]) == Integer.parseInt(criteriaForm.getSizeX())
                 &&
                 Integer.parseInt(splitSize[1]) == Integer.parseInt(criteriaForm.getSizeY());
-    }
-
-    private long getLongDate(String date) {
-        try {
-            return new SimpleDateFormat("dd/MM/yyyy").parse(date).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @Override
