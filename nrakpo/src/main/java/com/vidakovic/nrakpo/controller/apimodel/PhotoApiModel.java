@@ -1,10 +1,8 @@
 package com.vidakovic.nrakpo.controller.apimodel;
 
 import com.vidakovic.nrakpo.data.entity.Photo;
+import com.vidakovic.nrakpo.util.DateUtil;
 import com.vidakovic.nrakpo.util.HashtagUtil;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class PhotoApiModel {
     private Integer id;
@@ -44,7 +42,7 @@ public class PhotoApiModel {
         this.sizeX=photo.getSize().split("X")[0];
         this.sizeY=photo.getSize().split("X")[1];
         this.format=photo.getFormat().toString();
-        this.date = new SimpleDateFormat("dd/MM/yy").format(new Date(photo.getDate()));
+        this.date = new DateUtil().getSimpleDate(photo.getDate());
         this.username=photo.getUser().getUsername();
         this.hashtags=new HashtagUtil().parseHashtagsToString(photo.getHashtags());;
     }
