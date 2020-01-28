@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PhotoServiceDecorator implements PhotoService {
@@ -61,11 +60,6 @@ public class PhotoServiceDecorator implements PhotoService {
     @Override
     public FilteredPhoto downloadPhoto(Integer id, List<String> filters) {
         return photoService.downloadPhoto(id,filters);
-    }
-
-    @Override
-    public Map<String, Long> stats() {
-        return null;
     }
 
     @Override

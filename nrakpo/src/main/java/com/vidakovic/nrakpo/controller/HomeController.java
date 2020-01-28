@@ -42,7 +42,6 @@ public class HomeController {
 
     @GetMapping("/home")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model, Authentication authentication) {
-        photoService.stats();
         if (authentication == null) {
             Logger.getInstance().log("Anonymous user", "Accessing home page");
         } else {
