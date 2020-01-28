@@ -2,8 +2,8 @@ package com.vidakovic.nrakpo.service.criteria;
 
 import com.vidakovic.nrakpo.data.entity.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SizeCriteria implements Criteria {
 
@@ -15,13 +15,8 @@ public class SizeCriteria implements Criteria {
 
     @Override
     public List<Photo> criteriaCheck(List<Photo> photos) {
-        List<Photo> photosMatchingSize=new ArrayList<>();
-        for (Photo photo :
-                photos) {
-            if (photo.getSize().equals(size)){
-                photosMatchingSize.add(photo);
-            }
-        }
-        return photosMatchingSize;
+        return photos.stream()
+                .filter(x->x.getSize().equals(size))
+                .collect(Collectors.toList());
     }
 }

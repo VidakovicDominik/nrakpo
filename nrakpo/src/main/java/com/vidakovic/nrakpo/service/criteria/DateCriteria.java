@@ -3,8 +3,8 @@ package com.vidakovic.nrakpo.service.criteria;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.util.DateUtil;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DateCriteria implements Criteria {
@@ -20,13 +20,8 @@ public class DateCriteria implements Criteria {
 
     @Override
     public List<Photo> criteriaCheck(List<Photo> photos) {
-        List<Photo> photosMatchingDate=new ArrayList<>();
-        for (Photo photo:
-             photos) {
-            if(photo.getDate()>dateFrom&&photo.getDate()<dateTo){
-                photosMatchingDate.add(photo);
-            }
-        }
-        return photosMatchingDate;
+        return photos.stream()
+                .filter(p-> p.getDate()>dateFrom&&p.getDate()<dateTo)
+                .collect(Collectors.toList());
     }
 }

@@ -33,5 +33,9 @@ public class HashtagUtil {
         }
         return false;
     }
+
+    public List<String> trimHashtags(List<String> hashtags){
+        return hashtags.stream().map(x->x.trim()).collect(Collectors.toList());
+    }
 }
 

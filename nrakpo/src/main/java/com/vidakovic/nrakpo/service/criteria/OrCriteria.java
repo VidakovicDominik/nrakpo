@@ -19,9 +19,9 @@ public class OrCriteria implements Criteria {
         List<Photo> firstFilterItems = criteria.criteriaCheck(Photos);
         List<Photo> otherFilterItems = otherCriteria.criteriaCheck(Photos);
 
-        for (Photo Photo : otherFilterItems) {
-            if(!firstFilterItems.contains(Photo)){
-                firstFilterItems.add(Photo);
+        for (Photo photo : otherFilterItems) {
+            if(!firstFilterItems.contains(photo)){
+                firstFilterItems.add(photo);
             }
         }
         return firstFilterItems;
