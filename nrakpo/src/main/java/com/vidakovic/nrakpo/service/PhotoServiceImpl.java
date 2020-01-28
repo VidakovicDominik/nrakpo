@@ -3,7 +3,6 @@ package com.vidakovic.nrakpo.service;
 import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
-import com.vidakovic.nrakpo.data.entity.Hashtag;
 import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.data.entity.User;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
@@ -15,6 +14,7 @@ import com.vidakovic.nrakpo.service.builder.PhotoMockDirector;
 import com.vidakovic.nrakpo.service.cor.FilterService;
 import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
+import com.vidakovic.nrakpo.util.HashtagUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,8 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,19 +37,22 @@ public class PhotoServiceImpl implements PhotoService {
     CriteriaService criteriaService;
     FilterService filterService;
     PackageUsageService packageUsageService;
+    HashtagUtil hashtagUtil;
 
     public PhotoServiceImpl(PhotoRepository photoRepository,
                             UserRepository userRepository,
                             HashtagRepository hashtagRepository,
                             CriteriaService criteriaService,
                             FilterService filterService,
-                            PackageUsageService packageUsageService) {
+                            PackageUsageService packageUsageService,
+                            HashtagUtil hashtagUtil) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.hashtagRepository = hashtagRepository;
         this.criteriaService = criteriaService;
         this.filterService = filterService;
         this.packageUsageService = packageUsageService;
+        this.hashtagUtil=hashtagUtil;
     }
 
     @Override
@@ -68,17 +72,8 @@ public class PhotoServiceImpl implements PhotoService {
                         photo.getUrl(),
                         photo.getSizeX() + "X" + photo.getSizeY(),
                         ImageFormat.valueOf(photo.getFormat()),
-                        parseHashtags(photo.getHashtags()),
+                        hashtagUtil.parseHashtagsToList(photo.getHashtags()),
                         user));
-    }
-
-    private List<Hashtag> parseHashtags(String rawHashtags) {
-        List<Hashtag> hashtags = new ArrayList<>();
-        for (String ht : rawHashtags.trim().split("#")) {
-            if (!ht.equals(""))
-                hashtags.add(new Hashtag(ht.trim()));
-        }
-        return hashtags;
     }
 
     @Override
@@ -99,7 +94,7 @@ public class PhotoServiceImpl implements PhotoService {
         oldPhoto.setFormat(ImageFormat.valueOf(photo.getFormat()));
         oldPhoto.setUrl(photo.getUrl());
         oldPhoto.setSize(photo.getSizeX() + "X" + photo.getSizeY());
-        oldPhoto.setHashtags(parseHashtags(photo.getHashtags()));
+        oldPhoto.setHashtags(hashtagUtil.parseHashtagsToList(photo.getHashtags()));
         photoRepository.save(oldPhoto);
     }
 
@@ -115,28 +110,9 @@ public class PhotoServiceImpl implements PhotoService {
                 .filter(x -> x.getUser().getUsername().equals(criteriaForm.getAuthor()))
                 .filter(x -> x.getDate() > getLongDate(criteriaForm.getDateFrom()) && x.getDate() < getLongDate(criteriaForm.getDateTo()))
                 .filter(x -> checkSize(criteriaForm,x.getSize()))
-                .filter(x -> checkHashtags(criteriaForm, x.getHashtags()))
+                .filter(x -> hashtagUtil.hasCommonHashtag(criteriaForm.getHashtags(), x.getHashtags()))
                 .map(x -> new PhotoApiModel(x))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Map<String, Long> stats(){
-     return  ((List<Hashtag>)hashtagRepository.findAll()).stream().collect(Collectors.groupingBy(Hashtag::getName, Collectors.counting()));
-
-
-    }
-
-    private boolean checkHashtags(CriteriaForm criteriaForm, List<Hashtag> hashtags){
-        for (String hashtag :
-                Arrays.asList(criteriaForm.getHashtags().trim().split("#"))) {
-            for (Hashtag storedHashtag :
-                    hashtags) {
-                if (hashtag.equals(storedHashtag.getName()))
-                    return true;
-            }
-        }
-        return false;
     }
 
     private boolean checkSize(CriteriaForm criteriaForm, String size){
