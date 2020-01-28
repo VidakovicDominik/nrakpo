@@ -2,8 +2,8 @@ package com.vidakovic.nrakpo.service.criteria;
 
 import com.vidakovic.nrakpo.data.entity.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthorCriteria implements Criteria {
 
@@ -15,13 +15,8 @@ public class AuthorCriteria implements Criteria {
 
     @Override
     public List<Photo> criteriaCheck(List<Photo> photos) {
-        List<Photo> photosWithAuthor=new ArrayList<>();
-        for (Photo photo :
-                photos) {
-            if(photo.getUser().getUsername().equals(author)){
-                photosWithAuthor.add(photo);
-            }
-        }
-        return photosWithAuthor;
+        return photos.stream()
+                .filter(p->p.getUser().getUsername().equals(author))
+                .collect(Collectors.toList());
     }
 }
