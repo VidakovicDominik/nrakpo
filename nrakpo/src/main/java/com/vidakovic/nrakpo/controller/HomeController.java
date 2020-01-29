@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.service.PhotoService;
@@ -27,6 +28,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
+    @MeasureTime(metricName = "home_timer")
     @Log(message = "Accessing home page")
     public String showHome(@PageableDefault(size = 10) Pageable pageable, Model model, Authentication authentication) {
         model.addAttribute("page", photoService.getAllPhotos(pageable));

@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.aspect.Log;
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
@@ -47,21 +48,22 @@ public class InputController {
 
     PhotoService photoService;
 
-    public InputController(PhotoService photoService){
-        this.photoService=photoService;
+    public InputController(PhotoService photoService) {
+        this.photoService = photoService;
     }
 
     @GetMapping
-    public String showPictureUpload(Model model, Authentication authentication){
-        model.addAttribute("photo",new PhotoApiModel());
+    public String showPictureUpload(Model model, Authentication authentication) {
+        model.addAttribute("photo", new PhotoApiModel());
         model.addAttribute("formats", ImageFormat.values());
         return "upload";
     }
 
     @PostMapping
+    @MeasureTime(metricName = "picture_upload_timer")
     @Log(message = "Uploading picture")
-    public String showPictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication){
-        photoService.insertPhoto(photo,authentication.getName());
+    public String pictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
+        photoService.insertPhoto(photo, authentication.getName());
         return "redirect:/home";
     }
 }

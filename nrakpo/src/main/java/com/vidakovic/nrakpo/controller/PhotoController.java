@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.aspect.Log;
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
@@ -16,33 +17,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * <p>
- * <b>Title: PhotoController  </b>
- * </p>
- * <p>
- * <b> Description:
- *
- *
- * </b>
- * </p>
- * <p>
- * <b>Copyright:</b> Copyright (c) ETK 2019
- * </p>
- * <p>
- * <b>Company:</b> Ericsson Nikola Tesla d.d.
- * </p>
- *
- * @author ezviddo
- * @version PA1
- * <p>
- * <b>Version History:</b>
- * </p>
- * <br>
- * PA1 04-Sep-19
- * @since 04-Sep-19 16:10:42
- */
-
 @Controller
 @RequestMapping("/photo")
 public class PhotoController {
@@ -54,6 +28,7 @@ public class PhotoController {
     }
 
     @GetMapping("/{id}")
+    @MeasureTime(metricName = "photo_details_timer")
     public String showPhotoDetails(Model model, @PathVariable Integer id , Authentication authentication) {
         model.addAttribute("photo", photoService.getPhoto(id));
         model.addAttribute("filters", FilterType.values());
@@ -74,6 +49,7 @@ public class PhotoController {
 
     @PostMapping("/filter")
     @Log(message = "Filtering images")
+    @MeasureTime(metricName = "filter_photos_timer")
     public String filterPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
         model.addAttribute("photos", photoService.filterPhotos(criteriaForm));
         return "filtered_view";
@@ -81,6 +57,7 @@ public class PhotoController {
 
     @PostMapping("/update")
     @Log(message = "Updating image information")
+    @MeasureTime(metricName = "update_photo_timer")
     public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
         photoService.updatePhoto(photo);
         return "redirect:/home";
@@ -88,6 +65,7 @@ public class PhotoController {
 
     @PostMapping("/download/{id}")
     @Log(message = "Downloading image")
+    @MeasureTime(metricName = "download_timer")
     public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters, Authentication authentication){
         model.addAttribute("photo",photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));
         return "photo_download";
