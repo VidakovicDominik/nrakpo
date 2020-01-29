@@ -1,10 +1,10 @@
 package com.vidakovic.nrakpo.controller;
 
+import com.vidakovic.nrakpo.aspect.Log;
 import com.vidakovic.nrakpo.controller.apimodel.UserApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.service.UserService;
-import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,24 +23,22 @@ public class UserController {
     }
 
     @GetMapping()
-    public String showIndex(Model model , Authentication authentication) {
-        Logger.getInstance().log(authentication.getName(),"Accessing user list");
-        model.addAttribute("users",userService.getUsers());
+    public String showIndex(Model model, Authentication authentication) {
+        model.addAttribute("users", userService.getUsers());
         return "users";
     }
 
     @GetMapping("/update/{id}")
-    public String showUpdateUser(Model model, @PathVariable String id , Authentication authentication) {
-        Logger.getInstance().log(authentication.getName(),"Accessing user update page");
-        model.addAttribute("user", userService.getUser(id));
+    public String showUpdateUser(Model model, @PathVariable(value = "id") String username, Authentication authentication) {
+        model.addAttribute("user", userService.getUser(username));
         model.addAttribute("userPackages", UserPackage.values());
         model.addAttribute("userTypes", UserType.values());
         return "user_update";
     }
 
     @PostMapping("/update")
+    @Log(message = "Updating user information")
     public String updateUser(@Valid @ModelAttribute UserApiModel user, Authentication authentication) {
-        Logger.getInstance().log(authentication.getName(),"Updated user: "+user.getUsername());
         userService.updateUser(user);
         return "redirect:/home";
     }
