@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,9 +43,17 @@ public class LogAspect {
 
     @Before("@annotation(com.vidakovic.nrakpo.aspect.Log)")
     public void writeLog(final JoinPoint joinPoint) {
+        Authentication auth=null;
+        for (Object param :
+                joinPoint.getArgs()) {
+            if (param instanceof Authentication) {
+                auth = (Authentication) param;
+            }
+        }
         String message = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(Log.class).message();
         String methodName = joinPoint.getSignature().getName();
-        LOG.info(methodName+" : "+message);
+        String user=auth==null?"":"User: "+auth.getName()+", ";
+        LOG.info(user + methodName + " : " + message);
     }
 
 
