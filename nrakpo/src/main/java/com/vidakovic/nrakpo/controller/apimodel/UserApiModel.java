@@ -2,7 +2,7 @@ package com.vidakovic.nrakpo.controller.apimodel;
 
 import com.vidakovic.nrakpo.data.entity.User;
 
-public class UserApiModel {
+public class UserApiModel implements LoggableApiModel {
 
     private String username;
 
@@ -63,5 +63,10 @@ public class UserApiModel {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    @Override
+    public String logText() {
+        return "Received user data -> Username: "+this.username+" Email:"+ this.email+" User type:"+ userType;
     }
 }

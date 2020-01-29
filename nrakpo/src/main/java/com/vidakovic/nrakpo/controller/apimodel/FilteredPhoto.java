@@ -1,10 +1,6 @@
 package com.vidakovic.nrakpo.controller.apimodel;
 
-import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.Photo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FilteredPhoto extends PhotoApiModel {
     private String appliedFilters="";

@@ -4,7 +4,7 @@ import com.vidakovic.nrakpo.data.entity.Photo;
 import com.vidakovic.nrakpo.util.DateUtil;
 import com.vidakovic.nrakpo.util.HashtagUtil;
 
-public class PhotoApiModel {
+public class PhotoApiModel implements LoggableApiModel{
     private Integer id;
 
     private String description;
@@ -120,6 +120,11 @@ public class PhotoApiModel {
 
     public void setHashtags(String hashtags) {
         this.hashtags = hashtags;
+    }
+
+    @Override
+    public String logText() {
+        return "Received photo info-> Date:"+ this.date+ " Description:"+this.description+ " Image URL:"+this.url;
     }
 }
 

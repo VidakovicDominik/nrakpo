@@ -1,5 +1,6 @@
 package com.vidakovic.nrakpo.aspect;
 
+import com.vidakovic.nrakpo.controller.apimodel.LoggableApiModel;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -43,18 +44,24 @@ public class LogAspect {
 
     @Before("@annotation(com.vidakovic.nrakpo.aspect.Log)")
     public void writeLog(final JoinPoint joinPoint) {
-        Authentication auth=null;
+        Authentication auth = null;
+        LoggableApiModel apiModel=null;
         for (Object param :
                 joinPoint.getArgs()) {
             if (param instanceof Authentication) {
                 auth = (Authentication) param;
             }
+            if (param instanceof LoggableApiModel) {
+                apiModel = (LoggableApiModel) param;
+            }
         }
         String message = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(Log.class).message();
         String methodName = joinPoint.getSignature().getName();
-        String user=auth==null?"":"User: "+auth.getName()+", ";
-        LOG.info(user + methodName + " : " + message);
+        String user = auth == null ? "" : "User: " + auth.getName() + ", ";
+        String log=apiModel==null?"":apiModel.logText();
+        LOG.info(user + methodName + log+ " : " + message);
     }
+
 
 
 }
