@@ -6,7 +6,6 @@ import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.cor.FilterType;
-import com.vidakovic.nrakpo.service.decorator.PhotoServiceDecorator;
 import com.vidakovic.nrakpo.service.singleton.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -51,7 +50,7 @@ public class PhotoController {
 
     PhotoService photoService;
 
-    public PhotoController(PhotoServiceDecorator photoService){
+    public PhotoController(PhotoService photoService){
         this.photoService=photoService;
     }
 
@@ -78,7 +77,7 @@ public class PhotoController {
 
     @PostMapping("/filter")
     @Log(message = "Filtering images")
-    public String applyCriteriaToPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
+    public String filterPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
         Logger.getInstance().log(authentication.getName(),
                 "Accessing filter page with the following criteria:" +
                         " author->"+criteriaForm.getAuthor()+
@@ -94,7 +93,7 @@ public class PhotoController {
     @Log(message = "Updating image information")
     public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
         Logger.getInstance().log(authentication.getName(),"Updated photo with id: "+ photo.getId());
-        photoService.updatePhoto(photo,authentication.getName());
+        photoService.updatePhoto(photo);
         return "redirect:/home";
     }
 
@@ -107,4 +106,3 @@ public class PhotoController {
     }
 
 }
-

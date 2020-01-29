@@ -24,7 +24,7 @@ public class RegistrationController {
     }
 
     @GetMapping
-    public String registerForm(Model model) {
+    public String showRegisterForm(Model model) {
         model.addAttribute("user", new RegistrationForm());
         model.addAttribute("userPackages", UserPackage.values());
         model.addAttribute("accountTypes", AccountType.values());

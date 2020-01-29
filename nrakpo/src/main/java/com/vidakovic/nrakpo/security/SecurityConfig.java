@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/register").anonymous()
-                .antMatchers("/mock").permitAll()
+                .antMatchers("/test-support/**").permitAll()
                 .antMatchers("/users").hasRole("ADMIN")
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/home").permitAll()

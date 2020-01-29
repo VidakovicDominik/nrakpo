@@ -19,7 +19,7 @@ public class UserApiModel {
         this.email = user.getEmail();
         this.userType = user.getUserType().toString();
         this.userPackage = user.getUserPackage().toString();
-        this.accountType = user.getAccountType().toString();
+        this.accountType = user.getAccountType();
     }
 
     public UserApiModel() {
