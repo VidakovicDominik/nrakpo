@@ -7,8 +7,12 @@ import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.factory.UserFactory;
+import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,9 +20,20 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    private PackageUsageService packageUsageService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PackageUsageService packageUsageService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.packageUsageService=packageUsageService;
+    }
+
+    public List<UserApiModel> getUsers(){
+        return ((List<User>)userRepository.findAll()).stream().map(UserApiModel::new).collect(Collectors.toList());
+    }
+
+    public UserApiModel getUser(String username){
+        return new UserApiModel(userRepository.findById(username).get());
     }
 
     public void updateUser(UserApiModel userApiModel){
@@ -40,7 +55,14 @@ public class UserService {
         user.setEmail(registrationForm.getEmail());
         user.setPassword(passwordEncoder.encode(registrationForm.getPassword()));
         userRepository.saveUserWithAuthorities(user);
+    }
 
+    public boolean checkMonthlyConsumption(String username, long photoCount) {
+        User user = userRepository.findById(username).get();
+        if(user.getUserType().equals(UserType.ADMINISTRATOR)){
+            return false;
+        }
+        return packageUsageService.exeededLimit(user, photoCount);
     }
 
 }

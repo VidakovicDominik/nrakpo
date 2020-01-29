@@ -1,13 +1,8 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
-import com.vidakovic.nrakpo.data.repository.HashtagRepository;
-import com.vidakovic.nrakpo.data.repository.PhotoRepository;
-import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.PhotoService;
-import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import com.vidakovic.nrakpo.service.singleton.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -20,18 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class HomeController {
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    PhotoRepository photoRepository;
-
-    @Autowired
-    HashtagRepository hashtagRepository;
-
     PhotoService photoService;
 
-    public HomeController(PhotoServiceImpl photoService) {
+    public HomeController(PhotoService photoService) {
         this.photoService = photoService;
     }
 
@@ -50,12 +36,6 @@ public class HomeController {
         model.addAttribute("page", photoService.getAllPhotos(pageable));
         model.addAttribute("criteriaForm", new CriteriaForm());
         return "home";
-    }
-
-    @GetMapping("/mock")
-    public String mock(Model model) {
-        photoService.mock();
-        return "redirect:/home";
     }
 
 }
