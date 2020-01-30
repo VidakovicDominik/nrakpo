@@ -12,32 +12,6 @@ import org.springframework.util.StopWatch;
 
 import java.time.Duration;
 
-/**
- * <p>
- * <b>Title: MeasureTimeAspect  </b>
- * </p>
- * <p>
- * <b> Description:
- *
- *
- * </b>
- * </p>
- * <p>
- * <b>Copyright:</b> Copyright (c) ETK 2020
- * </p>
- * <p>
- * <b>Company:</b> Ericsson Nikola Tesla d.d.
- * </p>
- *
- * @author ezviddo
- * @version PA1
- * <p>
- * <b>Version History:</b>
- * </p>
- * <br>
- * PA1 16-Jan-20
- * @since 16-Jan-20 09:44:42
- */
 @Aspect
 @Component
 public class MeasureTimeAspect {

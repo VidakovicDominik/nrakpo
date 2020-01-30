@@ -39,6 +39,10 @@ public class DateUtil {
         return new SimpleDateFormat("dd/MM/yy").format(new Date(date));
     }
 
+    public String getSimpleDateAndTime(long date){
+        return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date(date));
+    }
+
     public long getLongDate(String date) {
         try {
             return new SimpleDateFormat("dd/MM/yyyy").parse(date).getTime();
