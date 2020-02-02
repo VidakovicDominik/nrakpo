@@ -1,10 +1,11 @@
 package com.vidakovic.nrakpo.data.entity;
 
-import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Photo {
@@ -27,7 +28,7 @@ public class Photo {
     @OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Hashtag> hashtags = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private User user;
 
     public Photo(String description, String url, String size, ImageFormat format, List<Hashtag> hashtags, User user) {
