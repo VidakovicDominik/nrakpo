@@ -52,7 +52,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+        .and().csrf().disable();
 
     }
 

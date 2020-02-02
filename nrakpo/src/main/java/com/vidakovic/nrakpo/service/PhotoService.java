@@ -10,8 +10,6 @@ import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.cor.FilterService;
-import com.vidakovic.nrakpo.service.criteria.CriteriaService;
-import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
 import com.vidakovic.nrakpo.util.DateUtil;
 import com.vidakovic.nrakpo.util.HashtagUtil;
 import org.springframework.data.domain.Page;
@@ -32,10 +30,8 @@ public class PhotoService {
     PhotoRepository photoRepository;
     UserRepository userRepository;
     HashtagRepository hashtagRepository;
-    CriteriaService criteriaService;
     FilterService filterService;
     UserService userService;
-    PackageUsageService packageUsageService;
     HashtagUtil hashtagUtil;
     DateUtil dateUtil;
             
@@ -43,18 +39,14 @@ public class PhotoService {
     public PhotoService(PhotoRepository photoRepository,
                         UserRepository userRepository,
                         HashtagRepository hashtagRepository,
-                        CriteriaService criteriaService,
                         FilterService filterService,
-                        PackageUsageService packageUsageService,
                         HashtagUtil hashtagUtil,
                         DateUtil dateUtil,
                         UserService userService) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.hashtagRepository = hashtagRepository;
-        this.criteriaService = criteriaService;
         this.filterService = filterService;
-        this.packageUsageService = packageUsageService;
         this.hashtagUtil = hashtagUtil;
         this.dateUtil=dateUtil;
         this.userService=userService;

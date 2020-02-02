@@ -36,7 +36,7 @@ import java.util.Date;
 public class DateUtil {
 
     public String getSimpleDate(long date){
-        return new SimpleDateFormat("dd/MM/yy").format(new Date(date));
+        return new SimpleDateFormat("dd/MM/yyyy").format(new Date(date));
     }
 
     public String getSimpleDateAndTime(long date){

@@ -5,6 +5,8 @@ import com.vidakovic.nrakpo.data.entity.Photo;
 public class FilteredPhoto extends PhotoApiModel {
     private String appliedFilters="";
 
+    public FilteredPhoto(){}
+
     public FilteredPhoto(Photo photo) {
         super(photo);
     }
