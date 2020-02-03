@@ -1,13 +1,8 @@
 package com.vidakovic.nrakpo.service.builder;
 
 import com.vidakovic.nrakpo.data.entity.Hashtag;
-import com.vidakovic.nrakpo.data.entity.LocalUser;
 import com.vidakovic.nrakpo.data.entity.Photo;
-import com.vidakovic.nrakpo.data.entity.User;
-import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
-import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
-import com.vidakovic.nrakpo.data.entity.enums.UserType;
 
 import java.util.Date;
 
@@ -36,15 +31,6 @@ public class PhotoBuilder {
         this.photo.setSize("50X50");
     }
 
-    public void setUser(){
-        LocalUser user=new LocalUser();
-        user.setUsername("user"+buffer);
-        user.setUserPackage(UserPackage.GOLD);
-        user.setEmail("email");
-        user.setPassword("123");
-        user.setUserType(UserType.USER);
-        this.photo.setUser(user);
-    }
 
     public void setDate(){
         this.photo.setDate(new Date().getTime());

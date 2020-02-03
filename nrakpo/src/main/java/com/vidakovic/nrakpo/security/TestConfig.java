@@ -40,7 +40,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @Profile("test")
-public class AuthConfiguration extends WebSecurityConfigurerAdapter {
+public class TestConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {

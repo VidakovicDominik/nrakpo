@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/home").permitAll()
                 .antMatchers("/photo/**").authenticated()
+                .antMatchers("/pictureUpload").authenticated()
                 .antMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 // ignore CSRF protection and allow IFRAME for h2 console

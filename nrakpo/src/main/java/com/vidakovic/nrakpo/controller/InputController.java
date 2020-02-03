@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
-
 /**
  * <p>
  * <b>Title: InputController  </b>
@@ -52,19 +50,19 @@ public class InputController {
         this.photoService = photoService;
     }
 
+    @PostMapping
+    @MeasureTime(metricName = "picture_upload_timer")
+    @Log(message = "Uploading picture")
+    public String pictureUpload(@ModelAttribute PhotoApiModel photo, Authentication authentication) {
+        photoService.insertPhoto(photo, authentication.getName());
+        return "redirect:/home";
+    }
+
     @GetMapping
     public String showPictureUpload(Model model, Authentication authentication) {
         model.addAttribute("photo", new PhotoApiModel());
         model.addAttribute("formats", ImageFormat.values());
         return "upload";
-    }
-
-    @PostMapping
-    @MeasureTime(metricName = "picture_upload_timer")
-    @Log(message = "Uploading picture")
-    public String pictureUpload(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
-        photoService.insertPhoto(photo, authentication.getName());
-        return "redirect:/home";
     }
 }
 

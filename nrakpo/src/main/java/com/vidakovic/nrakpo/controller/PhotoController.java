@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -47,20 +46,20 @@ public class PhotoController {
         return "photo_update";
     }
 
+    @PostMapping("/update")
+    @Log(message = "Updating image information")
+    @MeasureTime(metricName = "update_photo_timer")
+    public String updatePhoto(@ModelAttribute PhotoApiModel photo, Authentication authentication) {
+        photoService.updatePhoto(photo);
+        return "redirect:/home";
+    }
+
     @PostMapping("/filter")
     @Log(message = "Filtering images")
     @MeasureTime(metricName = "filter_photos_timer")
     public String filterPhotos(Model model, @ModelAttribute CriteriaForm criteriaForm, Authentication authentication){
         model.addAttribute("photos", photoService.filterPhotos(criteriaForm));
         return "filtered_view";
-    }
-
-    @PostMapping("/update")
-    @Log(message = "Updating image information")
-    @MeasureTime(metricName = "update_photo_timer")
-    public String updatePhoto(@Valid @ModelAttribute PhotoApiModel photo, Authentication authentication) {
-        photoService.updatePhoto(photo);
-        return "redirect:/home";
     }
 
     @PostMapping("/download/{id}")

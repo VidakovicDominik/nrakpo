@@ -13,7 +13,6 @@ public class PhotoMockDirector {
         builder.setFormat();
         builder.setHashtags();
         builder.setSize();
-        builder.setUser();
         builder.setUrl();
     }
 }
