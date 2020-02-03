@@ -1,6 +1,6 @@
 package com.vidakovic.nrakpo.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.RegistrationForm;
 import com.vidakovic.nrakpo.data.entity.Hashtag;
@@ -11,29 +11,25 @@ import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
+import com.vidakovic.nrakpo.service.PhotoService;
 import com.vidakovic.nrakpo.service.UserService;
-import io.restassured.http.ContentType;
-import io.restassured.http.Method;
+import com.vidakovic.nrakpo.service.cor.FilterType;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PhotoIntegrationTests {
-
-    @LocalServerPort
-    private int port;
 
     @Autowired
     PhotoRepository photoRepository;
@@ -45,7 +41,7 @@ public class PhotoIntegrationTests {
     UserService userService;
 
     @Autowired
-    ObjectMapper objectMapper;
+    PhotoService photoService;
 
     @BeforeAll
     @Transactional
@@ -54,45 +50,57 @@ public class PhotoIntegrationTests {
         userService.insertUser(new RegistrationForm("testuser", "pass", "email", UserType.ADMINISTRATOR, UserPackage.GOLD, AccountType.LOCAL));
     }
 
-    @Test
-    public void getPhotoDetailsTest() throws Exception {
-        photoRepository.save(new Photo("description123","url","50X50", ImageFormat.JPEG, Arrays.asList(new Hashtag("hashtag")),userRepository.findById("testuser").get())).getId();
-
-        given()
-                .port(port)
-                .auth()
-                .form("testuser","pass")
-                .when().request(Method.GET, "/photo/1").then().
-                        assertThat().body(containsString("testuser"))
-                        .assertThat().body(containsString("description"))
-                        .statusCode(200);
+    @BeforeEach
+    @Transactional
+    public void cleanDb(){
+        photoRepository.deleteAll();
     }
 
     @Test
-    public void updatePhotoTest() throws Exception {
-        Photo photo = new Photo("description123", "url", "50X50", ImageFormat.JPEG, Arrays.asList(new Hashtag("hashtag")), userRepository.findById("testuser").get());
+    public void insertPhotoTest(){
+        String description = "description";
+        PhotoApiModel photoApiModel =new PhotoApiModel(null, description, "url", "50", "50", "JPEG", "#hashtag", "2020/12/12","testuser");
+
+        photoService.insertPhoto(photoApiModel,"testuser");
+
+        assertThat(photoRepository.findAll().iterator().next().getDescription()).isEqualTo(description);
+
+    }
+
+    @Test
+    public void updatePhotoTest(){
+        Photo photo = createPhoto();
         photoRepository.save(photo).getId();
+
         PhotoApiModel photoApiModel=new PhotoApiModel(photo);
-        photoApiModel.setDescription("new description");
-        photoApiModel.setSizeX("60");
-        photoApiModel.setSizeY("60");
-        photoApiModel.setHashtags("#newhashtag");
-        photoApiModel.setId(photo.getId());
+        String newDescription = "new description";
+        photoApiModel.setDescription(newDescription);
+        String newHashtag = "newhashtag";
+        photoApiModel.setHashtags(newHashtag);
 
-        given()
-                .port(port)
-                .auth()
-                .basic("testuser","pass")
-                .body(objectMapper.writeValueAsString(photoApiModel))
-                .contentType(ContentType.JSON)
-                .when().request(Method.POST, "/photo/update").then()
-                .statusCode(302);
+        photoService.updatePhoto(photoApiModel);
 
-        Photo updatedPhoto = photoRepository.findById(photo.getId()).get();
-        assertThat(updatedPhoto.getDescription()).isEqualTo("new description");
+        assertThat(photoRepository.findById(photo.getId()).get().getDescription()).isEqualTo(newDescription);
+        assertThat(photoRepository.findById(photo.getId()).get().getHashtags().iterator().next().getName()).isEqualTo(newHashtag);
     }
 
+    @Test
+    public void downloadPhotoTest(){
+        Photo photo=photoRepository.save(createPhoto());
 
+        List<String> filters=Arrays.asList(FilterType.SEPIA.toString(),FilterType.NEGATIVE.toString());
+
+        FilteredPhoto filteredPhoto=photoService.downloadPhoto(photo.getId(),filters);
+
+        assertThat(filteredPhoto.getDescription()).isEqualTo(photo.getDescription());
+        assertThat(filteredPhoto.getAppliedFilters()).containsSequence(filters.get(0));
+        assertThat(filteredPhoto.getAppliedFilters()).containsSequence(filters.get(1));
+
+    }
+
+    private Photo createPhoto() {
+        return new Photo("description123", "url", "50X50", ImageFormat.JPEG, Arrays.asList(new Hashtag("hashtag")), userRepository.findById("testuser").get());
+    }
 
 
 }

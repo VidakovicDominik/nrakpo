@@ -10,6 +10,7 @@ import com.vidakovic.nrakpo.data.repository.HashtagRepository;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
 import com.vidakovic.nrakpo.service.cor.FilterService;
+import com.vidakovic.nrakpo.service.criteria.CriteriaService;
 import com.vidakovic.nrakpo.util.DateUtil;
 import com.vidakovic.nrakpo.util.HashtagUtil;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
@@ -34,7 +34,7 @@ public class PhotoService {
     UserService userService;
     HashtagUtil hashtagUtil;
     DateUtil dateUtil;
-            
+    CriteriaService criteriaService;
 
     public PhotoService(PhotoRepository photoRepository,
                         UserRepository userRepository,
@@ -42,7 +42,9 @@ public class PhotoService {
                         FilterService filterService,
                         HashtagUtil hashtagUtil,
                         DateUtil dateUtil,
-                        UserService userService) {
+                        UserService userService,
+                        CriteriaService criteriaService
+    ) {
         this.photoRepository = photoRepository;
         this.userRepository = userRepository;
         this.hashtagRepository = hashtagRepository;
@@ -50,6 +52,7 @@ public class PhotoService {
         this.hashtagUtil = hashtagUtil;
         this.dateUtil=dateUtil;
         this.userService=userService;
+        this.criteriaService=criteriaService;
     }
 
     
@@ -93,14 +96,7 @@ public class PhotoService {
 
     
     public List<PhotoApiModel> filterPhotos(CriteriaForm criteriaForm) {
-        List<Photo> photos = (List<Photo>) photoRepository.findAll();
-        return photos.stream()
-                .filter(x -> x.getUser().getUsername().equals(criteriaForm.getAuthor()))
-                .filter(x -> x.getDate() > dateUtil.getLongDate(criteriaForm.getDateFrom()) && x.getDate() < dateUtil.getLongDate(criteriaForm.getDateTo()))
-                .filter(x -> checkSize(criteriaForm, x.getSize()))
-                .filter(x -> hashtagUtil.hasCommonHashtag(criteriaForm.getHashtags(), x.getHashtags()))
-                .map(x -> new PhotoApiModel(x))
-                .collect(Collectors.toList());
+        return criteriaService.getPhotosByCriteriaUsingStream(criteriaForm);
     }
 
     private boolean checkSize(CriteriaForm criteriaForm, String size) {

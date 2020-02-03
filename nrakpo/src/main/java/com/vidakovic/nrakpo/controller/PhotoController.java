@@ -37,7 +37,7 @@ public class PhotoController {
     @GetMapping("/update/{id}")
     public String showUpdatePhoto(Model model, @PathVariable Integer id , Authentication authentication, HttpServletRequest request) {
         PhotoApiModel photo = photoService.getPhoto(id);
-        if(!photo.getUsername().equals(authentication.getName())||!request.isUserInRole("ADMIN")){
+        if(!photo.getUsername().equals(authentication.getName())&&!request.isUserInRole("ADMIN")){
             return "redirect:/home";
         }
         model.addAttribute("photo", photo);
