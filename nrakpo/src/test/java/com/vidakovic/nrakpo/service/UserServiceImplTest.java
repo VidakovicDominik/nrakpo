@@ -11,25 +11,23 @@ import com.vidakovic.nrakpo.service.strategy.PackageUsageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class UserServiceTest extends ServiceTest {
+class UserServiceImplTest extends ServiceTest {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    UserServiceImpl userServiceImpl;
 
     @MockBean
     PackageUsageService packageUsageService;
@@ -38,7 +36,7 @@ class UserServiceTest extends ServiceTest {
     void getUsers() {
         List<User> users = Arrays.asList(createUser());
         when(userRepository.findAll()).thenReturn(users);
-        List<UserApiModel> returnedUsers=userService.getUsers();
+        List<UserApiModel> returnedUsers= userServiceImpl.getUsers();
 
         assertThat(returnedUsers.iterator().next().getUsername()).isEqualTo(users.iterator().next().getUsername());
     }
@@ -47,7 +45,7 @@ class UserServiceTest extends ServiceTest {
     void getUser() {
         Optional<User> user = Optional.of(createUser());
         when(userRepository.findById(any())).thenReturn(user);
-        UserApiModel returnedUser=userService.getUser("username");
+        UserApiModel returnedUser= userServiceImpl.getUser("username");
 
         assertThat(returnedUser.getUsername()).isEqualTo(user.get().getUsername());
     }
@@ -58,7 +56,7 @@ class UserServiceTest extends ServiceTest {
         when(userRepository.findById(any())).thenReturn(user);
         UserApiModel userApiModel = new UserApiModel();
         userApiModel.setUserPackage(UserPackage.FREE.toString());
-        userService.updateUser(userApiModel);
+        userServiceImpl.updateUser(userApiModel);
 
         User expectedUser=createUser();
         expectedUser.setUserPackage(UserPackage.FREE);
@@ -71,7 +69,7 @@ class UserServiceTest extends ServiceTest {
         User user= createUser();
         RegistrationForm registrationForm=new RegistrationForm(user.getUsername(), user.getPassword(), user.getEmail(), user.getUserType(), user.getUserPackage(), AccountType.LOCAL);
 
-        userService.insertUser(registrationForm);
+        userServiceImpl.insertUser(registrationForm);
 
         verify(userRepository).saveUserWithAuthorities(any(LocalUser.class));
     }
@@ -81,7 +79,9 @@ class UserServiceTest extends ServiceTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(createUser()));
         when(packageUsageService.exeededLimit(any(),anyLong())).thenReturn(true);
 
-        assertThat(userService.checkMonthlyConsumption("username",10));
+        Throwable thrown = catchThrowable(() ->  userServiceImpl.checkMonthlyConsumption("username"));
+
+        assertThat(thrown).isInstanceOf(HttpClientErrorException.class);
     }
 
     @Test
@@ -91,7 +91,7 @@ class UserServiceTest extends ServiceTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
         when(packageUsageService.exeededLimit(any(),anyLong())).thenReturn(true);
 
-        assertThat(userService.checkMonthlyConsumption("username",10)).isFalse();
+        userServiceImpl.checkMonthlyConsumption("username");
     }
 
     private User createUser() {

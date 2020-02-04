@@ -6,6 +6,7 @@ import com.vidakovic.nrakpo.controller.form.RegistrationForm;
 import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class RegistrationController {
 
     private UserService userService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

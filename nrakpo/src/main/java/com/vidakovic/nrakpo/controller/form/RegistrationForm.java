@@ -5,14 +5,13 @@
  */
 package com.vidakovic.nrakpo.controller.form;
 
-import com.vidakovic.nrakpo.data.entity.User;
+import com.vidakovic.nrakpo.controller.apimodel.LoggableApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.AccountType;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-public class RegistrationForm {
+public class RegistrationForm  implements LoggableApiModel {
 
     private String username;
 
@@ -85,5 +84,10 @@ public class RegistrationForm {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
+    }
+
+    @Override
+    public String logText() {
+        return "Received new user registration info -> Username:"+getUsername()+" User type:"+getUserType().toString();
     }
 }

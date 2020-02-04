@@ -1,46 +1,31 @@
 package com.vidakovic.nrakpo.service;
 
-import com.vidakovic.nrakpo.data.entity.LocalUser;
-import com.vidakovic.nrakpo.data.entity.Photo;
-import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
-import com.vidakovic.nrakpo.data.entity.enums.UserType;
-import com.vidakovic.nrakpo.data.repository.HashtagRepository;
-import com.vidakovic.nrakpo.data.repository.PhotoRepository;
-import com.vidakovic.nrakpo.data.repository.UserRepository;
-import com.vidakovic.nrakpo.service.builder.PhotoBuilder;
-import com.vidakovic.nrakpo.service.builder.PhotoMockDirector;
-import org.springframework.stereotype.Service;
-
-@Service
-public class TestSupportService {
-    PhotoRepository photoRepository;
-    HashtagRepository hashtagRepository;
-    UserRepository userRepository;
-
-    public TestSupportService(PhotoRepository photoRepository, HashtagRepository hashtagRepository, UserRepository userRepository) {
-        this.photoRepository = photoRepository;
-        this.hashtagRepository = hashtagRepository;
-        this.userRepository =userRepository;
-    }
-
-    public void mock() {
-        LocalUser user=new LocalUser();
-        user.setUsername("user");
-        user.setUserPackage(UserPackage.GOLD);
-        user.setEmail("email");
-        user.setPassword("123");
-        user.setUserType(UserType.USER);
-        userRepository.save(user);
-        PhotoBuilder builder = new PhotoBuilder();
-        for (int i = 0; i < 9; i++) {
-            PhotoMockDirector director = new PhotoMockDirector(builder);
-            director.buildPhoto();
-            Photo photo = builder.getProduct();
-            photo.setUser(user);
-            photoRepository.save(photo);
-            hashtagRepository.saveAll(photo.getHashtags());
-            builder.reset();
-        }
-    }
+/**
+ * <p>
+ * <b>Title: TestSupportService  </b>
+ * </p>
+ * <p>
+ * <b> Description:
+ *
+ *
+ * </b>
+ * </p>
+ * <p>
+ * <b>Copyright:</b> Copyright (c) ETK 2020
+ * </p>
+ * <p>
+ * <b>Company:</b> Ericsson Nikola Tesla d.d.
+ * </p>
+ *
+ * @author ezviddo
+ * @version PA1
+ * <p>
+ * <b>Version History:</b>
+ * </p>
+ * <br>
+ * PA1 04-Feb-20
+ * @since 04-Feb-20 14:59:42
+ */
+public interface TestSupportService {
+    void mock();
 }
-

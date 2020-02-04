@@ -1,7 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.apimodel.UserApiModel;
-import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,11 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends ControllerTest{
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Test
     void showUsers() throws Exception {
-        when(userService.getUsers()).thenReturn(Collections.emptyList());
+        when(userServiceImpl.getUsers()).thenReturn(Collections.emptyList());
         mvc.perform(get("/users")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -37,7 +37,7 @@ class UserControllerTest extends ControllerTest{
 
     @Test
     void showUpdateUser() throws Exception {
-        when(userService.getUser(any())).thenReturn(new UserApiModel());
+        when(userServiceImpl.getUser(any())).thenReturn(new UserApiModel());
         mvc.perform(get("/users/update/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -47,7 +47,7 @@ class UserControllerTest extends ControllerTest{
 
     @Test
     void updateUser() throws Exception {
-        doNothing().when(userService).updateUser(any());
+        doNothing().when(userServiceImpl).updateUser(any());
         mvc.perform(post("/users/update")
                 .content(objectMapper.writeValueAsString(new UserApiModel()))
         )

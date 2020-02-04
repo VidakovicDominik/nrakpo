@@ -1,9 +1,10 @@
 package com.vidakovic.nrakpo.controller;
 
-import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.aspect.Log;
+import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,7 @@ public class HomeController {
 
     PhotoService photoService;
 
-    public HomeController(PhotoService photoService) {
+    public HomeController(PhotoServiceImpl photoService) {
         this.photoService = photoService;
     }
 

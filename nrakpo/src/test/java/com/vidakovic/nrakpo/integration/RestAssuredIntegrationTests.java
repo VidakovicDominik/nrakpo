@@ -9,7 +9,7 @@ import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
-import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import io.restassured.http.Method;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -64,14 +64,14 @@ public class RestAssuredIntegrationTests {
     UserRepository userRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
 
     @BeforeAll
     @Transactional
     public void createUser() {
         userRepository.deleteAll();
-        userService.insertUser(new RegistrationForm("testuser", "pass", "email", UserType.ADMINISTRATOR, UserPackage.GOLD, AccountType.LOCAL));
+        userServiceImpl.insertUser(new RegistrationForm("testuser", "pass", "email", UserType.ADMINISTRATOR, UserPackage.GOLD, AccountType.LOCAL));
     }
 
     @Test

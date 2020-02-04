@@ -5,6 +5,7 @@ import com.vidakovic.nrakpo.aspect.MeasureTime;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +47,7 @@ public class InputController {
 
     PhotoService photoService;
 
-    public InputController(PhotoService photoService) {
+    public InputController(PhotoServiceImpl photoService) {
         this.photoService = photoService;
     }
 

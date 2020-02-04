@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Arrays;
@@ -28,27 +29,25 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
-class PhotoServiceTest extends ServiceTest {
+class PhotoServiceImplTest extends ServiceTest {
 
     @MockBean
     PhotoRepository photoRepository;
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
-    PhotoService photoService;
+    PhotoServiceImpl photoServiceImpl;
 
     @Test
     void getPhoto() {
-        Optional<Photo> photo= Optional.of(new Photo("description", "url", "sizexXsizey", ImageFormat.JPEG, Collections.emptyList(), new User()));
+        Optional<Photo> photo= Optional.of(createPhoto());
         when(photoRepository.findById(any())).thenReturn(photo);
-        PhotoApiModel photoApiModel=photoService.getPhoto(1);
+        PhotoApiModel photoApiModel= photoServiceImpl.getPhoto(1);
 
         assertThat(photoApiModel.getDescription()).isEqualTo(photo.get().getDescription());
     }
@@ -57,9 +56,10 @@ class PhotoServiceTest extends ServiceTest {
     void insertPhoto() {
         Optional<User> user=Optional.of(new User("user","pass","email", UserType.USER, UserPackage.GOLD));
         when(userRepository.findById(any())).thenReturn(user);
-        when(userService.checkMonthlyConsumption(any(),anyLong())).thenReturn(false);
-        PhotoApiModel photoApiModel= new PhotoApiModel(1,"description","url","sizex","sizey","JPEG","hashtags","date","username");
-        photoService.insertPhoto(photoApiModel,"user");
+        doNothing().when(userServiceImpl).checkMonthlyConsumption(any());
+        PhotoApiModel photoApiModel= createPhotoApiModel();
+        photoServiceImpl.insertPhoto(photoApiModel,"user");
+
         verify(photoRepository).save(any());
     }
 
@@ -67,16 +67,17 @@ class PhotoServiceTest extends ServiceTest {
     void shouldNotInsertPhotoIfMonthlyLimitIsExeeded() {
         Optional<User> user=Optional.of(new User("user","pass","email", UserType.USER, UserPackage.GOLD));
         when(userRepository.findById(any())).thenReturn(user);
-        when(userService.checkMonthlyConsumption(any(),anyLong())).thenReturn(true);
-        PhotoApiModel photoApiModel= new PhotoApiModel(1,"description","url","sizex","sizey","JPEG","hashtags","date","username");
-        assertThrows(HttpClientErrorException.class,()->photoService.insertPhoto(photoApiModel,"user"));
+        doThrow(new HttpClientErrorException(HttpStatus.FORBIDDEN)).when(userServiceImpl).checkMonthlyConsumption(any());
+        PhotoApiModel photoApiModel= createPhotoApiModel();
+
+        assertThrows(HttpClientErrorException.class,()-> photoServiceImpl.insertPhoto(photoApiModel,"user"));
     }
 
     @Test
     void getAllPhotos() {
-        Page<Photo> photos= new PageImpl(Arrays.asList(new Photo("description", "url", "sizexXsizey", ImageFormat.JPEG, Collections.emptyList(), new User())));
+        Page<Photo> photos= new PageImpl(Arrays.asList(createPhoto()));
         when(photoRepository.findAll((Pageable) any())).thenReturn(photos);
-        Page<PhotoApiModel> photoApiModel=photoService.getAllPhotos(new PageRequest(1,1));
+        Page<PhotoApiModel> photoApiModel= photoServiceImpl.getAllPhotos(new PageRequest(1,1));
 
         assertThat(photoApiModel.iterator().next().getDescription()).isEqualTo(photos.iterator().next().getDescription());
     }
@@ -99,7 +100,15 @@ class PhotoServiceTest extends ServiceTest {
                 new DateUtil().getSimpleDate(new Date().getTime()-1000000000L),
                 new DateUtil().getSimpleDate(new Date().getTime()+1000000000L)
         );
-        assertThat(photoService.filterPhotos(criteriaForm).iterator().next().getDescription()).isEqualTo(searchedPhoto.getDescription());
+
+        assertThat(photoServiceImpl.filterPhotos(criteriaForm).iterator().next().getDescription()).isEqualTo(searchedPhoto.getDescription());
     }
 
+    private Photo createPhoto() {
+        return new Photo("description", "url", "sizexXsizey", ImageFormat.JPEG, Collections.emptyList(), new User());
+    }
+
+    private PhotoApiModel createPhotoApiModel() {
+        return new PhotoApiModel(1, "description", "url", "sizex", "sizey", "JPEG", "hashtags", "date", "username");
+    }
 }

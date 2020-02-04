@@ -11,8 +11,8 @@ import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.data.repository.PhotoRepository;
 import com.vidakovic.nrakpo.data.repository.UserRepository;
-import com.vidakovic.nrakpo.service.PhotoService;
-import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import com.vidakovic.nrakpo.service.cor.FilterType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,16 +38,16 @@ public class PhotoIntegrationTests {
     UserRepository userRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
-    PhotoService photoService;
+    PhotoServiceImpl photoServiceImpl;
 
     @BeforeAll
     @Transactional
     public void createUser() {
         userRepository.deleteAll();
-        userService.insertUser(new RegistrationForm("testuser", "pass", "email", UserType.ADMINISTRATOR, UserPackage.GOLD, AccountType.LOCAL));
+        userServiceImpl.insertUser(new RegistrationForm("testuser", "pass", "email", UserType.ADMINISTRATOR, UserPackage.GOLD, AccountType.LOCAL));
     }
 
     @BeforeEach
@@ -61,7 +61,7 @@ public class PhotoIntegrationTests {
         String description = "description";
         PhotoApiModel photoApiModel =new PhotoApiModel(null, description, "url", "50", "50", "JPEG", "#hashtag", "2020/12/12","testuser");
 
-        photoService.insertPhoto(photoApiModel,"testuser");
+        photoServiceImpl.insertPhoto(photoApiModel,"testuser");
 
         assertThat(photoRepository.findAll().iterator().next().getDescription()).isEqualTo(description);
 
@@ -78,7 +78,7 @@ public class PhotoIntegrationTests {
         String newHashtag = "newhashtag";
         photoApiModel.setHashtags(newHashtag);
 
-        photoService.updatePhoto(photoApiModel);
+        photoServiceImpl.updatePhoto(photoApiModel);
 
         assertThat(photoRepository.findById(photo.getId()).get().getDescription()).isEqualTo(newDescription);
         assertThat(photoRepository.findById(photo.getId()).get().getHashtags().iterator().next().getName()).isEqualTo(newHashtag);
@@ -90,7 +90,7 @@ public class PhotoIntegrationTests {
 
         List<String> filters=Arrays.asList(FilterType.SEPIA.toString(),FilterType.NEGATIVE.toString());
 
-        FilteredPhoto filteredPhoto=photoService.downloadPhoto(photo.getId(),filters);
+        FilteredPhoto filteredPhoto= photoServiceImpl.downloadPhoto(photo.getId(),filters);
 
         assertThat(filteredPhoto.getDescription()).isEqualTo(photo.getDescription());
         assertThat(filteredPhoto.getAppliedFilters()).containsSequence(filters.get(0));

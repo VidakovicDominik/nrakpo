@@ -1,7 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.controller.form.RegistrationForm;
-import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RegistrationControllerTest extends ControllerTest {
 
     @MockBean
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Test
     void showRegisterForm() throws Exception {
@@ -33,7 +33,7 @@ class RegistrationControllerTest extends ControllerTest {
 
     @Test
     void processRegistration() throws Exception {
-        doNothing().when(userService).insertUser(any());
+        doNothing().when(userServiceImpl).insertUser(any());
         mvc.perform(post("/register")
                 .content(objectMapper.writeValueAsString(new RegistrationForm()))
         )

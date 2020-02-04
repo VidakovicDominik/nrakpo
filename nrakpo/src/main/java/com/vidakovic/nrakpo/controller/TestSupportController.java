@@ -1,6 +1,7 @@
 package com.vidakovic.nrakpo.controller;
 
 import com.vidakovic.nrakpo.service.TestSupportService;
+import com.vidakovic.nrakpo.service.TestSupportServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ public class TestSupportController {
 
     TestSupportService testSupportService;
 
-    public TestSupportController(TestSupportService testSupportService) {
+    public TestSupportController(TestSupportServiceImpl testSupportService) {
         this.testSupportService = testSupportService;
     }
 

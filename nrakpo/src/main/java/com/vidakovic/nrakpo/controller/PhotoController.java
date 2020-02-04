@@ -6,6 +6,7 @@ import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
 import com.vidakovic.nrakpo.data.entity.enums.ImageFormat;
 import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import com.vidakovic.nrakpo.service.cor.FilterType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,8 +23,8 @@ public class PhotoController {
 
     PhotoService photoService;
 
-    public PhotoController(PhotoService photoService){
-        this.photoService=photoService;
+    public PhotoController(PhotoServiceImpl photoService){
+        this.photoService = photoService;
     }
 
     @GetMapping("/{id}")
@@ -66,7 +67,7 @@ public class PhotoController {
     @Log(message = "Downloading image")
     @MeasureTime(metricName = "download_timer")
     public String downloadAndFilterPhoto(Model model, @PathVariable Integer id,  @RequestParam(value = "pickedFilters" , required = false) String[] filters, Authentication authentication){
-        model.addAttribute("photo",photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));
+        model.addAttribute("photo", photoService.downloadPhoto(id, filters==null?new ArrayList():Arrays.asList(filters)));
         return "photo_download";
     }
 

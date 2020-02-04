@@ -6,6 +6,7 @@ import com.vidakovic.nrakpo.controller.apimodel.UserApiModel;
 import com.vidakovic.nrakpo.data.entity.enums.UserPackage;
 import com.vidakovic.nrakpo.data.entity.enums.UserType;
 import com.vidakovic.nrakpo.service.UserService;
+import com.vidakovic.nrakpo.service.UserServiceImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ public class UserController {
 
     UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

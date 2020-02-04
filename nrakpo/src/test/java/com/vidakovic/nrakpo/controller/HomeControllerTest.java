@@ -1,6 +1,6 @@
 package com.vidakovic.nrakpo.controller;
 
-import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,11 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class HomeControllerTest extends ControllerTest {
 
     @MockBean
-    private PhotoService photoService;
+    private PhotoServiceImpl photoServiceImpl;
 
     @Test
     void showHome() throws Exception {
-        when(photoService.getAllPhotos(any())).thenReturn(new PageImpl<>(Collections.emptyList()));
+        when(photoServiceImpl.getAllPhotos(any())).thenReturn(new PageImpl<>(Collections.emptyList()));
 
         mvc.perform(get("/home").accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string(containsString("Home")));

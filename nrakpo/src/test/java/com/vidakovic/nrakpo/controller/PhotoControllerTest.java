@@ -3,7 +3,7 @@ package com.vidakovic.nrakpo.controller;
 import com.vidakovic.nrakpo.controller.apimodel.FilteredPhoto;
 import com.vidakovic.nrakpo.controller.apimodel.PhotoApiModel;
 import com.vidakovic.nrakpo.controller.form.CriteriaForm;
-import com.vidakovic.nrakpo.service.PhotoService;
+import com.vidakovic.nrakpo.service.PhotoServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,11 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PhotoControllerTest extends ControllerTest{
 
     @MockBean
-    PhotoService photoService;
+    PhotoServiceImpl photoServiceImpl;
 
     @Test
     void showPhotoDetails() throws Exception {
-        when(photoService.getPhoto(any())).thenReturn(new PhotoApiModel(1,"description","url","sizex","sizey","format","hashtags","date","username"));
+        when(photoServiceImpl.getPhoto(any())).thenReturn(getPhotoApiModel());
         mvc.perform(get("/photo/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -38,7 +38,7 @@ class PhotoControllerTest extends ControllerTest{
 
     @Test
     void showUpdatePhoto() throws Exception {
-        when(photoService.getPhoto(any())).thenReturn(new PhotoApiModel(1,"description","url","sizex","sizey","format","hashtags","date","username"));
+        when(photoServiceImpl.getPhoto(any())).thenReturn(getPhotoApiModel());
         mvc.perform(get("/photo/update/1")
                 .with(user("admin").password("password").roles("ADMINISTRATOR"))
                 .accept(MediaType.APPLICATION_JSON))
@@ -47,7 +47,7 @@ class PhotoControllerTest extends ControllerTest{
 
     @Test
     void filterPhotos() throws Exception {
-        when(photoService.filterPhotos(any())).thenReturn(Collections.emptyList());
+        when(photoServiceImpl.filterPhotos(any())).thenReturn(Collections.emptyList());
         mvc.perform(post("/photo/filter")
                 .content(objectMapper.writeValueAsString(new CriteriaForm("author","hashtags","sizex","sizey","date","date")))
                 .with(user("admin").password("password").roles("ADMINISTRATOR"))
@@ -59,9 +59,9 @@ class PhotoControllerTest extends ControllerTest{
 
     @Test
     void updatePhoto() throws Exception {
-        doNothing().when(photoService).updatePhoto(any());
+        doNothing().when(photoServiceImpl).updatePhoto(any());
         mvc.perform(post("/photo/update")
-                .content(objectMapper.writeValueAsString(new PhotoApiModel(1,"description","url","sizex","sizey","format","hashtags","date","username")))
+                .content(objectMapper.writeValueAsString(getPhotoApiModel()))
                 .with(user("admin").password("password").roles("ADMINISTRATOR"))
         )
                 .andExpect(status().is3xxRedirection());
@@ -69,7 +69,7 @@ class PhotoControllerTest extends ControllerTest{
 
     @Test
     void downloadAndFilterPhoto() throws Exception {
-        when(photoService.downloadPhoto(any(),any())).thenReturn(new FilteredPhoto());
+        when(photoServiceImpl.downloadPhoto(any(),any())).thenReturn(new FilteredPhoto());
         mvc.perform(post("/photo/download/1")
                 .requestAttr("pickedFilters","[a,b,c]")
                 .with(user("admin").password("password").roles("ADMINISTRATOR"))
@@ -77,5 +77,9 @@ class PhotoControllerTest extends ControllerTest{
                 .andDo(print())
                 .andExpect(content().string(containsString("Please")))
                 .andExpect(status().isOk());
+    }
+
+    private PhotoApiModel getPhotoApiModel() {
+        return new PhotoApiModel(1, "description", "url", "sizex", "sizey", "format", "hashtags", "date", "username");
     }
 }

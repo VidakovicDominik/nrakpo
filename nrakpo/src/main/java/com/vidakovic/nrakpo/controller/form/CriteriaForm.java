@@ -1,6 +1,8 @@
 package com.vidakovic.nrakpo.controller.form;
 
-public class CriteriaForm {
+import com.vidakovic.nrakpo.controller.apimodel.LoggableApiModel;
+
+public class CriteriaForm implements LoggableApiModel {
 
     private String author;
 
@@ -72,5 +74,10 @@ public class CriteriaForm {
 
     public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
+    }
+
+    @Override
+    public String logText() {
+        return "Received criteria info -> Author:"+getAuthor()+" Hashtags:"+getHashtags();
     }
 }
